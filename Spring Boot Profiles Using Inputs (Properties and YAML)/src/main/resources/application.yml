@@ -1,0 +1,46 @@
+student:
+  id: 456 - default | yml
+  name: krishna - default | yml
+  dept: physics - default | yml
+  fee: 75000 - default | yml
+  
+employee:  id: 123 - default | yml
+  name: sai - default | yml
+  dept: stats - default | yml
+  fee: 50000 - default | yml
+  
+---
+spring:
+  config:    activate:      on-profile:      - dev
+student:
+  id: 456 - dev | yml
+  name: krishna - dev | yml
+  dept: physics - dev | yml
+  fee: 75000 - dev | yml
+  
+employee:
+  id: 123 - dev | yml
+  name: sai - dev | yml
+  dept: stats - dev | yml
+  fee: 50000 - dev | yml
+  
+---
+spring:
+  config:
+    activate:
+      on-profile:
+      - prod
+student:
+  id: 456 - prod | yml
+  name: krishna - prod | yml
+  dept: physics - prod | yml
+  fee: 75000 - prod | yml
+  
+employee:
+  id: 123 - prod | yml
+  name: sai - prod | yml
+  dept: stats - prod | yml
+  fee: 50000 - prod | yml
+  
+
+
