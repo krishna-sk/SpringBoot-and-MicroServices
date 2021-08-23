@@ -1,0 +1,17 @@
+my:
+  key:
+    sname: krishna
+    sid: 1234
+    sfee: 54568    marks:      - 95
+      - 96
+      - 97
+      - 98
+    grades:      A: A1
+      B: A2
+      C: A3
+      D: A4
+    address:
+      hno: 564
+      location: Mysore
+      pincode: 5600061      
+
