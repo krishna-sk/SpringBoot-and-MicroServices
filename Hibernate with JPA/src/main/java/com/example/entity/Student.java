@@ -16,10 +16,10 @@ public class Student {
 	@Column(name="sid")
 	private Integer stdId;
 	
-	@Column(name="stdName")
+	@Column(name="stdName",nullable=false,length=30)
 	private String stdName;
 	
-	@Column(name="stdFee")
+	@Column(name="stdFee",nullable=false)
 	private Double stdFee;
 	
 }
