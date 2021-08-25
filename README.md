@@ -225,3 +225,47 @@ Examples:-
 #### point of time : Exact start date/time
 
 1st Jan- 9AM, 31st Dec-6PM ..etc
+
+## [Hibernate with JPA](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/Hibernate%20with%20JPA)
+
+###### 24th August 2021
+
+#### Hibernate:-
+
+1. Entity Class
+1. Configuration XML
+1. Test/Main class
+
+**Entity Class :** A class that is mapped with Database table using JPA Annotations. (@Entity, @Table, @Id, @Column ..etc)
+
+```java
+@Entity
+@Table(name="stdtab")
+class Student {
+ @Id
+ @Column(name="sid")
+ Integer stdId;
+ @Column(name="sname")
+ String stdName;
+ @Column(name="sfee")
+ Double stdFee;
+}
+```
+
+**@Entity :** Must be applied on top of class, that maps class with table and variable with columns.\
+**@Id :** It indicates Primary Key, it must be applied over a variable.\
+**@Table :** It is optional. If we do not provide tableName, then class name is taken as tableName.\
+**@Column :** It is optional. If we do not provide ColumnName, then variable name is taken as ColumnName.
+
+- Hibernate Initial Releases are not implementation of JPA. They are just ORM implementation.
+- After Hibernate 5.x (5.2.x) is following JPA implementation.
+
+| old                    | new                  |
+| ---------------------- | -------------------- |
+| SessionFactory         | EntityManagerFactory |
+| Session                | EntityManager        |
+| Transaction            | EntityTransaction    |
+| save(obj):Serializable | persist(obj):void    |
+| update(obj)            | merge(obj)           |
+| delete(obj)            | remove(obj)          |
+| get(T.class,id)        | find(T.class,id)     |
