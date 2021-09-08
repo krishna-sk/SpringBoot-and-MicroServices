@@ -269,3 +269,68 @@ class Student {
 | update(obj)            | merge(obj)           |
 | delete(obj)            | remove(obj)          |
 | get(T.class,id)        | find(T.class,id)     |
+
+## [Spring Boot Data JPA](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/Spring-Boot-Data-JPA)
+- Spring Boot Data JPA (Spring Data JPA) is internally using Sun JPA and JBoss Hibernate implementation.
+-  Data JPA Generates one Proxy class by taking SimpleJpaRepository(C) as input Template.
+  -  Embedded Database : (No Download + No Install/ Runs at RAM) H2, Derby, and HyperSQL(HSQL).
+  - External Database : MySQL, Oracle, Postgress...etc
+- If we move from one database to another databse only jar(Driver JAR) and properties are going to be changed. Code remains same.
+
+**application.properties file**
+```textile
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Drive
+spring.datasource.url=jdbc:mysql://localhost:3306/boot9am
+spring.datasource.username=test
+spring.datasource.password=root
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=create
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
+```
+
+**application.properties file**
+```textile
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/boot9am
+    username: test
+    password: root
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+
+```
+
+
+- For Embedded Database above properties comes with default values. Use only for Development/test purpose only, dont use at production.
+
+- JDBC 4.x has provided -AutoLoading of Driver class
+  ie if we did not specify driver class, based on URL and JAR in classpath
+  Driver is loaded and Register.
+
+- Hibernate (4.x)- Auto Detect of Dialect is exist, if we did not specify
+  any dialect also fine.
+
+**Note:**
+1. Programmer has to define one interface with Model/Entity class and
+PK DataType.
+1. That interface must extend any one of below type
+   - CrudRepository<T,ID>
+   - PagingAndSortingRepository<T,ID>
+   - JpaRepository<T,ID>
+1. For above interfaces implementation logic is given by : SimpleJpaRepository<T,ID>
+1. At runtime by taking SimpleJpaRepository template one class is generated (no .java/.class physically exist) that gives implementation for your entity class based.
+1. Transaction Management is implemented using Spring AOP (Aspected Oriented Programming) advices.
+   - before advice calls beginTx() method
+   - afterReturningAdvice (on success) ---> commit()
+   - afterThrowingAdvice(on exception) ---> rollback()
+1. Here, need not to apply @Repository annotation. No Need of Dao-DaoImpl pattern.
+1. Providing driver class name and dialect in properties file is optional based on URL provided and JAR added(pom.xml) they are auto-detected/loaded.
+1. Data JPA is for SQL based databases only. Not supported for NoSQL.
