@@ -15,9 +15,13 @@ import javax.persistence.MapKeyColumn;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name="emptab")
 public class Employee {

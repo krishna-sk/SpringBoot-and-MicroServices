@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
 @Entity(name="associate")
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name="associate")
 public class Associate {
 	
 	@Id

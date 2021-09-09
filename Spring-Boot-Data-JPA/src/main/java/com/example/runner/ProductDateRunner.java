@@ -30,6 +30,8 @@ public class ProductDateRunner implements CommandLineRunner {
 		product.setPackingTime(date); 
 		
 		productRepo.save(product);
+		
+		productRepo.findAll().forEach(System.out::println);
 	}
 
 }
