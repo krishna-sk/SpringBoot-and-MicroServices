@@ -180,6 +180,9 @@ Custom Query :
 - Must specify variables conditions returns and params  to generate SQL query (dialect)
 - Simple meaning of findBy : select * from (table) WHERE (conditions);
 - Need not to define any SQL. Here is to compare with findBy.
+- only for SELECT operation
+- recomanded for simple conditions
+- No Joins, No Complex Queries..etc
 ##### Syntax
 ``` textile
     <Return> findBy<VariablesAndConditions>(<Params>)
@@ -215,3 +218,56 @@ class Employee {
 //Generated SQL:
     SELECT * FROM EMPTAB WHERE ENAME is not null
 ```
+##### @Query() :-
+- We can define one Own Query
+- Supports Both SELECT and NON-SELECT(Update/Delete)
+- Projects supported (fetch required columns)
+- SQL(Native SQL) and JPQL/HQL
+- Complex Queries (Joins, sub-queries, Procedure calls...)
+
+##### JPQL/HQL [Java Persisted Query Language / Hibernate Query Language]
+-  SQL queries are DB dependent. It may not work for all DBs.
+- JPQL/HQL supports every Database, using dialect.
+```textile   
+    JPQL/HQL -----(Dilect)-------(Generated:SQL)-------> Database
+    SQL: table and column names
+    JPQL/HQL : className and variableName
+```
+- SQL queries case-insensitive
+```sql
+  SELECT EID FROM EMPTAB;
+  select eid from emptab;
+  (all are same)
+```
+- JPQL/HQL are partially case-sensitive\
+   Java words(className,variable name) -  case-sensitive\
+   SQL words (SELECT, FROM, WHERE) -- case-insensitive
+
+##### Examples
+###### EX 1:
+-  SQL :\
+select eid from emptab where ename=? or esal>?
+- JPQL/HQL\
+SELECT empId FROM Employee WHERE empName=? OR empSal>?
+
+###### EX 2: *******
+- SQL:\
+ SELECT * FROM EMPTAB
+- JPQL/HQL:\
+     SELECT * FROM Employee (Invalid)\
+     FROM Employee (valid)\
+     SELECT E FROM Employee E (using alias -- valid)
+
+##### SELECT OPERATIONS
+**case#1 :**\
+select all columns\
+Output : List(T)  , T = Model className
+
+**case#2 :**\
+select one column\
+Output : List(DT) , DT=DataType of column/variable
+
+**case#3 :**\
+select multiple columns , not all\
+Output: List(Object[]) , []-multiple columns data
+
