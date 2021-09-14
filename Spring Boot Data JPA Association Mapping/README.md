@@ -35,6 +35,8 @@ Multiplicity (4)
 - For one-to-many and many-to-one FK column is created at many side.
 - For many-to-many one additional table is created with 2 Fk columns
 - For one-to-one , we choose *...1 and many side UNIQUE condition is applied.
+- For any Association Mapping, code must be given at HAS-A variable only\
+  ie JoinColumn, JoinTable, OneToMany/ManyToOne/ManyToMany...etc
 ```textile
        1...1
 person  --- aadhar
@@ -71,3 +73,8 @@ College --- Branch
 ```
 - Provide Join Column (or) Join table at HAS-A Variable
 - Draw tables with column details..
+
+#### Cascading :-
+- When we perform any non-select operation(save/update/delete) same you want to apply on child object also, then use cascading.
+- If we use cascading such relation is called as Composition
+ else it is called as Aggregation.
