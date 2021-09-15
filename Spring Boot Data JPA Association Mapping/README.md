@@ -66,7 +66,7 @@ College --- Branch
   - If collection type then change HAS-A variable to collection type.
 - Apply Association Mapping annotation over HAS-A Variable.
 ```textile
-1...1 | @ManyToOne (unique condition)
+1...1 | @OneToOne
 *...1 | @ManyToOne
 1...* | @OneToMany
 *...* | @ManyToMany
