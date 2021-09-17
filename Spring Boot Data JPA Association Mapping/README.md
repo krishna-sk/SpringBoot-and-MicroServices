@@ -78,3 +78,10 @@ College --- Branch
 - When we perform any non-select operation(save/update/delete) same you want to apply on child object also, then use cascading.
 - If we use cascading such relation is called as Composition
  else it is called as Aggregation.
+
+## @OneToOne
+- Hibernate old version (3.x) [not following JPA]\
+     1...1 = *...1  (@ManyToOne + Many side unique condition)
+
+- Hibernate with JPA (new versions)\
+    1...1 =  @OneToOne annotation
