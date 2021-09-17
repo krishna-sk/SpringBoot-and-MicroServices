@@ -85,3 +85,65 @@ College --- Branch
 
 - Hibernate with JPA (new versions)\
     1...1 =  @OneToOne annotation
+
+## Joins
+To fetch data from multipl table using single SELECT SQL.
+
+- INNER JOIN  | JOIN : only connected rows of both tables
+
+- OUTERS JOIN 
+  - LEFT OUTER JOIN | LEFT JOIN  : Left side table all rows, connected right side table rows
+  - RIGHT OUTER JOIN| RIGHT JOIN : Right side table all rows, connected left side table rows
+  - FULL OUTER JOIN | FULL JOIN  : Both connected and non-connected rows(in simple all rows)
+
+#### Syntax (HQL Joins)
+```sql
+SELECT P.<variable>, C.<variable>
+
+FROM ParentClass P
+   ( [join type ]
+  p.<hasAVariable> as C )  [repeate for multiple classes]
+
+WHERE <Condition>;
+
+```
+> SQL joins:- https://www.w3schools.com/sql/sql_join.asp
+```java
+Employee---<>Address
+
+class Address{
+  //aid,loc,pin
+}
+class Employee{
+  //eid,ename,esal
+  Address addr;
+}
+```
+#### HQL Joins Syntax:
+```sql
+SELECT e.ename, a.loc
+
+FROM  Employee e
+     INNER JOIN
+     e.addr as a
+
+WHERE e.eid=?
+```
+- To implement Joins Two model/entity classes must have been connected
+  using HAS-A Relation and any one Association Mapping(1..1/1...* ...etc)
+- We can fetch data from tables, no INSERT/UPDATE/DELETE can be done using joins
+- Any one Join type must be used.
+```textile
+INNER JOIN  (or)  JOIN
+LEFT OUTER JOIN  (or) LEFT JOIN
+RIGHT OUTER JOIN  (or) RIGHT JOIN
+FULL OUTER JOIN  (or) FULL JOIN  (This may not be suported by all DBs)
+```
+- words INNER AND OUTER are optional to use.
+```sql
+select e.ename, p.pname 
+from emptab e 
+full outer join 
+projtab p 
+on e.pid_fk=p.pid;
+```
