@@ -1,6 +1,7 @@
 package com.example.entity;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -30,7 +31,7 @@ public class User {
 	@Column(name="uaddr")
 	private String uaddr;
 
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name="usrcrstab",
 	 joinColumns = @JoinColumn(name="uidFk"),
 	 inverseJoinColumns = @JoinColumn(name="cidFk")

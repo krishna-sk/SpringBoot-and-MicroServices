@@ -1,5 +1,6 @@
 package com.example.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -26,7 +27,7 @@ public class Employee {
 	@Column(name="edept")
 	private String empDept;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="pidFk")
 	private Project pob;//HAS-A
 }
