@@ -1,6 +1,7 @@
 package com.example.entity;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -22,7 +23,7 @@ public class Professor {
 	private String name;
 	private Double sal;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	@JoinColumn(name="pidFk")
 	/*@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="pidFk",unique = true)*/

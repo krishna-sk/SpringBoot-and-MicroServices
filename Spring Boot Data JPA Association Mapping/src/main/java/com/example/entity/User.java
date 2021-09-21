@@ -31,7 +31,7 @@ public class User {
 	@Column(name="uaddr")
 	private String uaddr;
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
 	@JoinTable(name="usrcrstab",
 	 joinColumns = @JoinColumn(name="uidFk"),
 	 inverseJoinColumns = @JoinColumn(name="cidFk")

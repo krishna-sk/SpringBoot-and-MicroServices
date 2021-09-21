@@ -79,6 +79,15 @@ College --- Branch
 - If we use cascading such relation is called as Composition
  else it is called as Aggregation.
 
+#### FetchType :-
+- FetchType(enum) used for select operations, to specify should it fetch parent with child data or not.
+  - **LAZY**  : Fetch only parent data
+  - **EAGER** : Fetch parent and its child data too.
+- Default FetchType is 
+  - OneToMany,ManyToMany : LAZY
+  - OneToOne,ManyToOne : EAGER
+- Note : If child is many then default fetch type is lazy, If child is one then default fetch type is eager.
+
 ## @OneToOne
 - Hibernate old version (3.x) [not following JPA]\
      1...1 = *...1  (@ManyToOne + Many side unique condition)
