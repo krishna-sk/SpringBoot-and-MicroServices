@@ -1,5 +1,25 @@
 # SpringBoot-and-MicroServices
 
+### Table of Contents
+
+- [ComponentScan](#componentscan)
+- [@Value, properties file](#value-properties-file)
+- [Project Lombok API](#project-lombok-api)
+- [CommandLineRunner & ApplicationRunner](#commandlinerunner--applicationrunner)
+- [@ConfigurationProperties](#configurationproperties)
+- [@Inputs to Application , Option Args](#inputs-to-application--option-args)
+- [Spring Boot Profiles Using Inputs (Properties/YAML)](#spring-boot-profiles-using-inputs-propertiesyaml)
+- [Spring Boot Profiles Using @Profile](#spring-boot-profiles-using-profile)
+- [Spring Boot Stop Watch, Banner and VM args](#spring-boot-stop-watch-banner-and-vm-args)
+- [Spring Boot Email Programming part-1](#spring-boot-email-programming-part-1)
+- [Spring Boot Email Programming part-2](#spring-boot-email-programming-part-2)
+- [Spring Boot Scheduling](#spring-boot-scheduling)
+- [Hibernate with JPA](#hibernate-with-jpa)
+- [Spring Boot Data JPA](#spring-boot-data-jpa)
+-  [Spring Boot Data JPA - Association Mapping](#spring-boot-data-jpa--association-mapping)
+
+
+
 ## [@ComponentScan](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/ComponentScan)
 
 ###### 22nd July 2021
@@ -99,7 +119,7 @@
 
 - set active profiles while running the application using **--spring.profiles.active=profileName** in the run configuration program arguments
 
-## [Spring Boot Profiles Using Coding (Logic) -- @Profile](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/Spring%20Boot%20Profiles%20Using%20Profile%20Annotation)
+## [Spring Boot Profiles Using @Profile](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/Spring%20Boot%20Profiles%20Using%20Profile%20Annotation)
 
 ###### 10th August 2021
 
@@ -275,12 +295,13 @@ class Student {
 ###### 25th August to 9th September 2021
 
 - Spring Boot Data JPA (Spring Data JPA) is internally using Sun JPA and JBoss Hibernate implementation.
--  Data JPA Generates one Proxy class by taking SimpleJpaRepository(C) as input Template.
-  -  Embedded Database : (No Download + No Install/ Runs at RAM) H2, Derby, and HyperSQL(HSQL).
-  - External Database : MySQL, Oracle, Postgress...etc
+- Data JPA Generates one Proxy class by taking SimpleJpaRepository(C) as input Template.
+- Embedded Database : (No Download + No Install/ Runs at RAM) H2, Derby, and HyperSQL(HSQL).
+- External Database : MySQL, Oracle, Postgress...etc
 - If we move from one database to another databse only jar(Driver JAR) and properties are going to be changed. Code remains same.
 
 **application.properties file**
+
 ```textile
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Drive
 spring.datasource.url=jdbc:mysql://localhost:3306/boot9am
@@ -293,6 +314,7 @@ spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
 ```
 
 **application.properties file**
+
 ```textile
 spring:
   datasource:
@@ -311,7 +333,6 @@ spring:
 
 ```
 
-
 - For Embedded Database above properties comes with default values. Use only for Development/test purpose only, dont use at production.
 
 - JDBC 4.x has provided -AutoLoading of Driver class
@@ -322,8 +343,9 @@ spring:
   any dialect also fine.
 
 **Note:**
+
 1. Programmer has to define one interface with Model/Entity class and
-PK DataType.
+   PK DataType.
 1. That interface must extend any one of below type
    - CrudRepository<T,ID>
    - PagingAndSortingRepository<T,ID>
@@ -338,14 +360,16 @@ PK DataType.
 1. Providing driver class name and dialect in properties file is optional based on URL provided and JAR added(pom.xml) they are auto-detected/loaded.
 1. Data JPA is for SQL based databases only. Not supported for NoSQL.
 
-## [Spring Boot Data JPA - Association Mapping](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/Spring%20Boot%20Data%20JPA%20Association%20Mapping)
+## [Spring Boot Data JPA : Association Mapping](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/Spring%20Boot%20Data%20JPA%20Association%20Mapping)
 
 ###### 13th to 17th September 2021
 
 ### Association Mapping + Joins
 
 #### Database :
+
 Link one table(Primary Key) with another table(Foreign Key) using PK-FK Columns.
+
 ```textile
 Multiplicity (4)
  one to one       1...1
@@ -354,7 +378,7 @@ Multiplicity (4)
  many to many     *...*
 
            1...1
- employee ------ passport 
+ employee ------ passport
 
 	  1...*
  employee ------ address
@@ -371,12 +395,14 @@ Multiplicity (4)
 	  *...*
  student ------ course
 ```
-**Hint:** *(Many) Side FK Column is created.
+
+**Hint:** \*(Many) Side FK Column is created.
 
 **Note:**
+
 - For one-to-many and many-to-one FK column is created at many side.
 - For many-to-many one additional table is created with 2 Fk columns
-- For one-to-one , we choose *...1 and many side UNIQUE condition is applied.
+
 ```textile
        1...1
 person  --- aadhar
@@ -391,7 +417,7 @@ Faculty --- Course
 Student --- Contact
 
        1...*
-College --- Branch 
+College --- Branch
 
 --------------------------------------------------------------------------
 	Non-Collection                   Collection
@@ -400,16 +426,56 @@ College --- Branch
 	 *...1                           *...*
 --------------------------------------------------------------------------
 ```
+
 #### Steps :
+
 - Define two classes and apply HAS-A Relation (create HAS-A Variable)
-- Check for Non-Collection  | Collection  Type.  
+- Check for Non-Collection | Collection Type.
   - If collection type then change HAS-A variable to collection type.
 - Apply Association Mapping annotation over HAS-A Variable.
+
 ```textile
 1...1 | @ManyToOne (unique condition)
 *...1 | @ManyToOne
 1...* | @OneToMany
 *...* | @ManyToMany
 ```
+
 - Provide Join Column (or) Join table at HAS-A Variable
 - Draw tables with column details..
+
+#### Cascading :-
+
+- When we perform any non-select operation(save/update/delete) same you want to apply on child object also, then use cascading.
+- If we use cascading such relation is called as Composition
+  else it is called as Aggregation.
+
+#### FetchType :-
+
+- FetchType(enum) used for select operations, to specify should it fetch parent with child data or not.
+  - **LAZY** : Fetch only parent data
+  - **EAGER** : Fetch parent and its child data too.
+- Default FetchType is
+  - OneToMany,ManyToMany : LAZY
+  - OneToOne,ManyToOne : EAGER
+- Note : If child is many then default fetch type is lazy, If child is one then default fetch type is eager.
+
+#### Joins
+
+To fetch data from multipl table using single SELECT SQL.
+
+- INNER JOIN | JOIN : only connected rows of both tables
+
+- OUTERS JOIN
+  - LEFT OUTER JOIN | LEFT JOIN : Left side table all rows, connected right side table rows
+  - RIGHT OUTER JOIN| RIGHT JOIN : Right side table all rows, connected left side table rows
+  - FULL OUTER JOIN | FULL JOIN : Both connected and non-connected rows(in simple all rows)
+
+### Stored procedures
+
+- To execute set of statements as a single call can be done using
+  Stored Procedure concept.
+  - Stored Procedure === Java Methods
+  - IN Params === Parameter
+  - OUT Param === ReturnType
+- At database side we create Procedure and at java side we call it/execute it.
