@@ -525,7 +525,7 @@ ViewPage ==> Prefix   +  ViewName + suffix\
 ```
 
 JSP : Sun(Oracle)\
-Thymeleaf : https://www.thymeleaf.org/\
+Thymeleaf : https://www.thymeleaf.org/ \
 freemarker : https://freemarker.apache.org/
 
 - Non-Java UI : Angular/ReactJS
