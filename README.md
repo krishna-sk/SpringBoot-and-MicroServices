@@ -16,9 +16,8 @@
 - [Spring Boot Scheduling](#spring-boot-scheduling)
 - [Hibernate with JPA](#hibernate-with-jpa)
 - [Spring Boot Data JPA](#spring-boot-data-jpa)
--  [Spring Boot Data JPA - Association Mapping](#spring-boot-data-jpa--association-mapping)
-
-
+- [Spring Boot Data JPA - Association Mapping](#spring-boot-data-jpa--association-mapping)
+- [Spring Boot Web Mvc](#spring-boot-web-mvc)
 
 ## [@ComponentScan](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/ComponentScan)
 
@@ -101,7 +100,7 @@
 
 - What ever process we use, finally we can read data using @Value or @ConfigurationProperties only.
 
-## [Spring Boot Profiles Using Inputs (Properties/YAML)](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/Spring%20Boot%20Profiles%20Using%20Inputs%20(Properties%20and%20YAML))
+## [Spring Boot Profiles Using Inputs (Properties/YAML)](<https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/Spring%20Boot%20Profiles%20Using%20Inputs%20(Properties%20and%20YAML)>)
 
 ###### 9th August 2021
 
@@ -471,7 +470,7 @@ To fetch data from multipl table using single SELECT SQL.
   - RIGHT OUTER JOIN| RIGHT JOIN : Right side table all rows, connected left side table rows
   - FULL OUTER JOIN | FULL JOIN : Both connected and non-connected rows(in simple all rows)
 
-### Stored procedures
+#### Stored procedures
 
 - To execute set of statements as a single call can be done using
   Stored Procedure concept.
@@ -479,3 +478,67 @@ To fetch data from multipl table using single SELECT SQL.
   - IN Params === Parameter
   - OUT Param === ReturnType
 - At database side we create Procedure and at java side we call it/execute it.
+
+## [Spring Boot Web Mvc](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/SpringBootWebMvc)
+
+- MVC is a design pattern used to develop web applications.\
+  M - Model (Data)\
+  V - View (UI/Display)\
+  C - Controller (Class/request process)\
+- At least one Servlet is required to develop web applications using Java.
+- Web Browser can run/understand only : HTML,CSS and Javascript.
+- Servlets --> (.java)-->(.class) ->service() output : HTML => Sent to browser
+- Angular --> .ts ->(bundle) .js --> .js + .css + .html -> Sent to browser
+
+###### Controller --> for a module in a project
+
+Ex:
+
+```textile
+ --------------------------------
+  Module      ControllerName
+ --------------------------------
+  User        UserController
+  Search      SearchController
+  Cart        CartController
+  Payment     PaymentController
+  ..etc
+```
+
+- HandlerMapping helps FC to identify one controller based on Path + httpMethod
+- Controller returns ViewName(no Location and Extension of File)
+  to be independent of UI technologies.
+
+- Controlle provides Data(Stored inside Model-->Container)
+  which is optional
+- Expression Language : reads data from Container at runtime
+  provide to UI page
+  Ex: Welcome to ${varaible}\
+
+Ex ViewName(String) : Home, Profile, Settings (Controller returns)
+
+ViewResolver will add prefix (location) and suffix(extension)
+
+```textile
+ViewPage ==> Prefix   +  ViewName + suffix\
+  	        /mypages/      Home     .jsp
+```
+
+JSP : Sun(Oracle)\
+Thymeleaf : https://www.thymeleaf.org/\
+freemarker : https://freemarker.apache.org/
+
+- Non-Java UI : Angular/ReactJS
+
+- In Spring Boot Autoconfiguration is provided for
+
+  1. FrontCotroller
+  1. ViewResolver (provide prefix and suffix using properties)
+  1. HandlerMapping
+
+- only code for : Controller, View pages and Model(I)
+
+- Spring Boot provides servers too (Embedded Server) No need to Download and Install
+  1. Apache Tomcat (default)
+  1. JBoss undertow
+  1. Eclipse Jetty
