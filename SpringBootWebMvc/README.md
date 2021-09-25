@@ -1,6 +1,6 @@
 # Spring Boot Web MVC
 
-[SpringBootWebMvcFirstApp](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/SpringBootWebMvc/SpringBootWebMvcFirstApp)
+### [SpringBootWebMvcFirstApp](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/SpringBootWebMvc/SpringBootWebMvcFirstApp)
 
 - MVC is a design pattern used to develop web applications.\
   M - Model (Data)\
@@ -65,7 +65,7 @@ freemarker : https://freemarker.apache.org/
   1. JBoss undertow
   1. Eclipse Jetty
 
-  [SpringBootWebMvcJSPFirstApp](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/SpringBootWebMvc/SpringBootWebMvcJspFirstApp)
+### [SpringBootWebMvcJSPFirstApp](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/SpringBootWebMvc/SpringBootWebMvcJspFirstApp)
 
 - **RequestMethod :** RequestMethod is enum given by web mvc having values like
   - GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, TRACE
@@ -102,7 +102,7 @@ freemarker : https://freemarker.apache.org/
 
 ### Spring Boot Web MVC + Thymeleaf UI
 
-[SpringBootWebMvcThymeleafBasic](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/SpringBootWebMvc/SpringBootWebMvcThymeleafBasic)
+### [SpringBootWebMvcThymeleafBasic](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/SpringBootWebMvc/SpringBootWebMvcThymeleafBasic)
 
 **JSP : Java Server Pages (JASPER)**
 
