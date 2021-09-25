@@ -1,9 +1,6 @@
 # Spring Boot Web MVC
 
-#### Projects
-
 [SpringBootWebMvcFirstApp](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/SpringBootWebMvc/SpringBootWebMvcFirstApp)\
-[SpringBootWebMvcJSPFirstApp](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/SpringBootWebMvc/SpringBootWebMvcJspFirstApp)
 
 - MVC is a design pattern used to develop web applications.\
   M - Model (Data)\
@@ -68,6 +65,8 @@ freemarker : https://freemarker.apache.org/
   1. JBoss undertow
   1. Eclipse Jetty
 
+  [SpringBootWebMvcJSPFirstApp](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/SpringBootWebMvc/SpringBootWebMvcJspFirstApp)
+
 - **RequestMethod :** RequestMethod is enum given by web mvc having values like
   - GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, TRACE
 - RequestMethod default type is GET\
@@ -100,6 +99,98 @@ freemarker : https://freemarker.apache.org/
 1. If using JSP check tomcat-embeeded JASPER added or not?
 
 ---
+
+### Spring Boot Web MVC + Thymeleaf UI
+
+[SpringBootWebMvcThymeleafBasic](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/SpringBootWebMvc/SpringBootWebMvcThymeleafBasic)
+
+**JSP : Java Server Pages (JASPER)**
+
+- Servlets are heavy weight objects (which takes lot of memory).
+- Every JSP file internally one Servlet.
+- JSP even converts static data into Java code.
+- Lot of object are created while executing it.
+  Servlet object, config, context, request, response...etc
+- **Recomanded to keep single servlet in project, ie only dispatcher servlet.**
+
+**Thymeleaf :**
+
+- It is java based runtime engine/ UI Technology.
+- Static data will not be processed by Thymeleaf, only dynamic data is processed.
+- It will not be converted to any servlet class. So no additional memory required.
+- It is a simple HTML file internally.
+- only Dynamic tags are processed and replaced with its result by Thymeleaf Runtime Engine. (https://www.thymeleaf.org/).
+
+Ex: static content
+
+```html
+<h3>Welcome</h3>
+```
+
+Ex: dynamic content
+
+```js
+[[${service.printDate()}]]
+```
+
+- Spring Boot supports Integration with Thyemeleaf UI:
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-thymeleaf</artifactId>
+</dependency>
+```
+
+- Thymeleaf Configuration is done by Spring boot (Autoconfiguration)\
+  **default prefix = classpath:/templates/**\
+  **[classpath is src/main/resources folder]**\
+  **default suffix = .html**
+- Thymeleaf supports resource reading by default.
+
+```textile
+  static folder
+  js
+  css
+  images
+  ..etc (all we can access)
+```
+
+### Create Executable WAR and run
+
+**Step : 1** Create WAR file
+
+- Right click on project > Run as > Maven Clean
+- Right click on project > Run as > Maven Install
+
+**Step : 2** Refresh project (F5)
+
+- Right click on project > Refresh
+
+**Step : 3** Check WAR file
+
+- Goto target folder > check for file name \_\_\_\_.war
+- file name looks like: (artifactId)-(version).(packaging)
+- ex: SpringBoot2WebMvcThymeleafBasic-1.0.war
+
+**Step : 4** Open cmd location
+
+- Right click on project > Proeprties > Click on Arrow Symbol > [show in system explorer]
+- open target folder
+- open cmd location for same
+- (or click inside addressbar > enter cmd > press enter key)
+
+**Ex:** D:\SB9AM_AUG2021\SpringBoot2WebMvcThymeleafBasic\target>
+
+**Step : 5** Run server with your inputs
+
+- java -jar SpringBoot2WebMvcThymeleafBasic-1.0.war
+
+- java -jar SpringBoot2WebMvcThymeleafBasic-1.0.war --spring.profiles.active=prod
+
+- java -jar SpringBoot2WebMvcThymeleafBasic-1.0.war --server.port=9900
+
+- Enter URL: http://localhost:9900/show
 
 ## FAQ
 
