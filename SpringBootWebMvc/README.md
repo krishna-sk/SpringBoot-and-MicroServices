@@ -192,6 +192,210 @@ Ex: dynamic content
 
 - Enter URL: http://localhost:9900/show
 
+### Controller
+
+- It is a class that process request.
+- One Method - One Request process concept\
+  "\login" -- login()\
+  "\register" -- register()
+
+#### Rules for defining controller
+
+1. Class must have @Controller, else object is not created, request is not processed.
+2. If we use @Component/@Service .. in place of @Controller, object is created, request is not processed.
+3. Every method exist in Controller, link with path/url + HttpMethod using @RequestMapping\
+   Ex:
+
+```java
+@Controller
+class UserController{
+
+  @RequestMapping(value="/login", method=RequestMapping.GET)
+  public String showLogin(){
+       return "/login";
+  }
+
+  @RequestMapping(value="/signUp", method=RequestMapping.GET)
+  public String showSignUp(){
+       return "/login";
+  }
+```
+
+4. Default Method is GET, if we did not specify any RequestMethod.
+
+```java
+@RequestMapping(value="/login", method=RequestMapping.GET) ,
+@RequestMapping(value="/login") both are same
+```
+
+5. URL is case senstive. /show, /SHOW are different.
+
+```java
+@Controller
+class UserController{
+
+  @RequestMapping(value="/login")
+  public String showLogin(){
+      return "/login";
+  }
+
+  @RequestMapping(value="/LOGIN")
+  public String showSignUp(){
+      return "/signup";
+  }
+```
+
+6. Duplicate URL/Path is allowed with combination of HTTP Method. (Combination should not be duplicated)
+
+```java
+@RequestMapping(value="/login",method=RequestMapping.GET)
+  public String showLogin1(){
+      return "/login1";
+  }
+
+  @RequestMapping(value="/login",method=RequestMapping.POST)
+  public String showLogin2(){
+      return "/login2";
+  }
+```
+
+7. Default path URL is /. If we provide only @RequestMapping.
+
+```java
+@RequestMapping(value="/", method=RequestMapping.GET) ,
+@RequestMapping(value="/")
+@RequestMapping are same
+```
+
+8. We can provide multiple url to one Controller Method. All paths must be either GET or POST.
+
+```java
+@RequestMapping(value={"/","/login","/welcome"},method=RequestMethod.GET)
+public String showLogin(){
+    return "/login";
+}
+```
+
+9. We can even use multiple HttpMethod types for one URL.
+
+```java
+@RequestMapping(value="/show",method={RequestMethod.GET,RequestMethod.POST})
+public String showLogin(){
+    return "/login";
+}
+```
+
+10. Even mixing of point 8 and point 9 is allowed.
+
+```java
+@RequestMapping(value={"/","/login","/welcome"},method={RequestMethod.GET,RequestMethod.POST})
+public String showLogin(){
+    return "/login";
+}
+
+```
+
+11. We can define one normal java method inside controller (without @RequestMapping). It can never be executed by front controllre for a request.\
+    **Use Case :** If two or more controller methods having common code then user normal java method for common code and call it where you want.
+
+```java
+@Controller
+class UserController{
+
+  @GetMapping("/show)       // @RequestMapping(value="/login",method=RequestMapping.GET) both are same
+    getData();
+    return "show";
+  }
+
+  @PostMapping("/login)    // @RequestMapping(value="/login",method=RequestMapping.POST) both are same
+  public String method2(){
+    getData();
+    return "login";
+  }
+
+  private String getData(){
+    return "data";
+  }
+
+}
+```
+
+12. Multiple Controllers can be define for multiple modules in project.\
+    **Ex:**\
+    UserController\
+    SearchController\
+    EmployeeController\
+    GridController\
+    ... etc
+
+13. RequestMapping is optional at class level.\
+    **Recommended to provide one common path at class level using @RequestMapping**
+
+        ```java
+        @RequestMapping("/user)
+        class UserController{
+
+        }
+
+        @RequestMapping("/search)
+        class SearchController{
+
+        }
+
+        ```
+
+14. Even we can define @RequestMapping("/") or @RequestMapping (which is valid) at controller class level.
+
+```java
+  @RequestMapping("/")
+  class UserController{
+
+  }
+```
+
+15. **Latest annotations used for HTTP Methods**\
+    **GET -** @GetMapping("/login) , @RequestMapping(value="/login",method=RequestMapping.GET) are same\
+    **POST -** @PostMapping("/login) , @RequestMapping(value="/login",method=RequestMapping.POST) are same
+
+16. If we provide same path/http method type then application will <span style="color:red">fail to start.</span>
+17. Default server port number is 8080. If we set to 80.(sever.port=80) then need not to enter port number in URL (http default port number is 80)\
+    http://localhost:80/show, http://localhost/show are same if server.port=80
+18. One Controller method should have only one time @RequestMapping
+
+<span style="color:red">**Invalid**</span>
+
+```java
+class UserController(){
+  @RequestMapping(value="/login")
+  @RequestMapping(value="/show")  // application failed to start. Instead of this use point 8
+  public String show(){
+
+  }
+
+}
+```
+
+19.We can provide same path at class and method level too.
+
+```java
+@RequestMapping("/show")
+class UserController(){
+
+  @RequestMapping(value="/login")
+  public String show(){
+
+  }
+
+}
+
+// URL : http://localhost:8080/show/show
+```
+
+20. Do not provide any prefix and suffix while returning viewName.(viewName is case senstive)
+21. Incase of Spring/servlets app, URL may contain project name. But here, no project name is used in URL. In spring boot default is set to "/".
+    To set your own context path(project name in URL) use application.properties
+    **Ex:** server.servlet.context-path=/project-name
+
 ## FAQ
 
 **Q) In how many ways end user can make request using browser?**\
@@ -217,7 +421,7 @@ Ex: /emp + GET
 class EmployeeController {
   @RequestMapping(value="/emp",method=RequestMethod.GET)
   public String showHome() {
-    return "EmpHome";
+      return "EmpHome";
   }
 }
 ```
