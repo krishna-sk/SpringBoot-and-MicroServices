@@ -331,7 +331,7 @@ class UserController{
 13. RequestMapping is optional at class level.\
     **Recommended to provide one common path at class level using @RequestMapping**
  ```java
-  @RequestMapping("/user)
+  @RequestMapping("/user")
   class UserController{
 
   }
