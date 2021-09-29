@@ -285,11 +285,12 @@ public String showLogin(){
 }
 ```
 
-10. Even mixing of point 8 and point 9 is allowed.
+10. Even mixing of point 8 and point 9 is allowed. To see which request method and which uri is called we use HttpServletRequest obejct.
 
 ```java
 @RequestMapping(value={"/","/login","/welcome"},method={RequestMethod.GET,RequestMethod.POST})
-public String showLogin(){
+public String showLogin(HttpServletRequest request){
+  System.out.println("FROM "+request.getRequestURI()+", using : " + request.getMethod());
     return "/login";
 }
 
@@ -330,18 +331,20 @@ class UserController{
 
 13. RequestMapping is optional at class level.\
     **Recommended to provide one common path at class level using @RequestMapping**
- ```java
-  @RequestMapping("/user")
-  class UserController{
 
-  }
+```java
+ @RequestMapping("/user")
+ class UserController{
 
-  @RequestMapping("/search)
-  class SearchController{
+ }
 
-  }
+ @RequestMapping("/search)
+ class SearchController{
+
+ }
 
 ```
+
 14. Even we can define @RequestMapping("/") or @RequestMapping (which is valid) at controller class level.
 
 ```java
@@ -426,3 +429,132 @@ class EmployeeController {
 
 If we enter full URL: http://localhost:8080/emp in addressbar
 above showHome() method is called. It loads EmpHome.html
+
+## Sending Data from Controller to UI(View)
+
+- Model(I) is given by Spring WEB MVC, used to share data from Controller to UI.
+- Stores data in Key=Val format. Key is String, Value is Object type.
+- To add Data from Controller use method model.addAttribute(key,value)
+- To read data at UI , use Syntax EL: ${key}
+- To print `[[${key}]]` (or) `th:text="${key}"`
+- BindingAwareModelMap(C) is impl class selected by WEB MVC.This object is handled by Spring container.
+- Value is Object type : any type is valid. Primitive/Object/Collection
+
+**Case 1:** Sending Primitives
+
+**StudentController.java**
+```java
+@Controller("/student")
+public class StudentController {
+    @GetMapping("/show")
+    public String showData(Model model){
+      System.out.println(model.getClass().getName());
+      model.addAttribute("sid", 10);
+      model.addAttribute("sname", "AA");
+      return "StdData";
+    }
+}
+```
+**StdData.html**
+```html
+<html xmlns:th="https://www.thymeleaf.org/">
+  <head>
+    <title>WELCOME</title>
+  </head>
+
+  <body>
+    <p>Data is [[${sid}]],[[${sname}]]</p>
+  </body>
+</html>
+```
+
+**Case 2:** Sending Object
+
+**Student.java**
+```java
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Student {
+  private Integer sid;
+  private String sname;
+  private Double sfee;
+}
+```
+
+**StudentController.java**
+```java
+@Controller("/student")
+public class StudentController {
+    @GetMapping("/show")
+    public String showData(Model model){
+      Student s1 = new Student(101,"AA", 200.0);
+      model.addAttribute("sob", s1);
+      return "StdData";
+    }
+}
+```
+**StdData.html**
+```html
+<html xmlns:th="https://www.thymeleaf.org/">
+
+<head>
+    <title>WELCOME</title>
+</head>
+
+<body>
+    <p> Data is [[${sob}]],[[${sob.sid}]]</p>
+    <p th:text="${sob}"></p>
+    <p th:text="${sob.sid}"></p>
+    <p th:text="${sob.sname}"></p>
+</body>
+
+</html>
+```
+
+**Case 3:** Sending Collection
+
+**StudentController.java**
+```java
+@Controller("/student")
+public class StudentController {
+    @GetMapping("/show")
+    public String showData(Model model){
+      List<Student> list = Arrays.asList(
+                    new Student(100, "AA", 2500.0),
+                    new Student(101, "BA", 2900.0),
+                    new Student(102, "AC", 2800.0),
+                    new Student(103, "FF", 2600.0) );
+      model.addAttribute("list", list);
+      return "StdData";
+    }
+}
+```
+**StdData.html**
+```html
+<html xmlns:th="https://www.thymeleaf.org/">
+
+<head>
+    <title>WELCOME</title>
+</head>
+
+<body>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>FEE</th>
+        </tr>
+        <tr th:each="ob:${list}">
+            <td>[[${ob.sid}]]</td>
+            <td>[[${ob.sname}]]</td>
+            <td>[[${ob.sfee}]]</td>
+        </tr>
+    </table>
+    <hr />
+    <p> Data is [[${list}]]</p>
+    <p th:text="${list}"></p>
+</body>
+
+</html>
+```
