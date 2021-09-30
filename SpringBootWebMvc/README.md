@@ -397,6 +397,175 @@ class UserController(){
     To set your own context path(project name in URL) use application.properties
     **Ex:** server.servlet.context-path=/project-name
 
+## Sending Data from Controller to UI(View)
+
+- Model(I) is given by Spring WEB MVC, used to share data from Controller to UI.
+- Stores data in Key=Val format. Key is String, Value is Object type.
+- To add Data from Controller use method model.addAttribute(key,value)
+- To read data at UI , use Syntax EL: ${key}
+- To print `[[${key}]]` (or) `th:text="${key}"`
+- BindingAwareModelMap(C) is impl class selected by WEB MVC.This object is handled by Spring container.
+- Value is Object type : any type is valid. Primitive/Object/Collection
+
+**Case 1:** Sending Primitives
+
+**StudentController.java**
+
+```java
+@Controller("/student")
+public class StudentController {
+    @GetMapping("/show")
+    public String showData(Model model){
+      System.out.println(model.getClass().getName());
+      model.addAttribute("sid", 10);
+      model.addAttribute("sname", "AA");
+      return "StdData";
+    }
+}
+```
+
+**StdData.html**
+
+```html
+<html xmlns:th="https://www.thymeleaf.org/">
+  <head>
+    <title>WELCOME</title>
+  </head>
+
+  <body>
+    <p>Data is [[${sid}]],[[${sname}]]</p>
+  </body>
+</html>
+```
+
+**Case 2:** Sending Object
+
+**Student.java**
+
+```java
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Student {
+  private Integer sid;
+  private String sname;
+  private Double sfee;
+}
+```
+
+**StudentController.java**
+
+```java
+@Controller("/student")
+public class StudentController {
+    @GetMapping("/show")
+    public String showData(Model model){
+      Student s1 = new Student(101,"AA", 200.0);
+      model.addAttribute("sob", s1);
+      return "StdData";
+    }
+}
+```
+
+**StdData.html**
+
+```html
+<html xmlns:th="https://www.thymeleaf.org/">
+  <head>
+    <title>WELCOME</title>
+  </head>
+
+  <body>
+    <p>Data is [[${sob}]],[[${sob.sid}]]</p>
+    <p th:text="${sob}"></p>
+    <p th:text="${sob.sid}"></p>
+    <p th:text="${sob.sname}"></p>
+  </body>
+</html>
+```
+
+**Case 3:** Sending Collection
+
+**StudentController.java**
+
+```java
+@Controller("/student")
+public class StudentController {
+    @GetMapping("/show")
+    public String showData(Model model){
+      List<Student> list = Arrays.asList(
+                    new Student(100, "AA", 2500.0),
+                    new Student(101, "BA", 2900.0),
+                    new Student(102, "AC", 2800.0),
+                    new Student(103, "FF", 2600.0) );
+      model.addAttribute("list", list);
+      return "StdData";
+    }
+}
+```
+
+**StdData.html**
+
+```html
+<html xmlns:th="https://www.thymeleaf.org/">
+  <head>
+    <title>WELCOME</title>
+  </head>
+
+  <body>
+    <table border="1">
+      <tr>
+        <th>ID</th>
+        <th>NAME</th>
+        <th>FEE</th>
+      </tr>
+      <tr th:each="ob:${list}">
+        <td>[[${ob.sid}]]</td>
+        <td>[[${ob.sname}]]</td>
+        <td>[[${ob.sfee}]]</td>
+      </tr>
+    </table>
+    <hr />
+    <p>Data is [[${list}]]</p>
+    <p th:text="${list}"></p>
+  </body>
+</html>
+```
+
+## HTML Forms (Model Attribute)
+
+- Spring Container converts form data into Object format when we click on submit button.
+- Spring Container is
+  - Creating object (using default constructor)
+  - Read data from Form Input `[request.getParameter]`
+  - Parse data if required `[Integer.parseInt]`
+  - Set data to object using setter methods.
+- Programmer has to ,
+
+  - Create one Model class
+  - Define default constructor
+  - Create variables with set methods (No of Variables = No of Inputs)
+  - Bind with form input
+
+  ```html
+  <input name="varibaleName">
+  <select name="varibaleName">
+  <textarea name="varibaleName">
+  ```
+
+  - Finally read object in Controller Class
+
+```java
+@Controller("/employee")
+public class EmployeeController {
+    @GetMapping("/show")
+    public String showData(@ModelAttribute Employee employee, Model model){
+      model.addAttribute("emp",employee);
+      return "EmpData";
+    }
+}
+```
+
 ## FAQ
 
 **Q) In how many ways end user can make request using browser?**\
@@ -429,132 +598,3 @@ class EmployeeController {
 
 If we enter full URL: http://localhost:8080/emp in addressbar
 above showHome() method is called. It loads EmpHome.html
-
-## Sending Data from Controller to UI(View)
-
-- Model(I) is given by Spring WEB MVC, used to share data from Controller to UI.
-- Stores data in Key=Val format. Key is String, Value is Object type.
-- To add Data from Controller use method model.addAttribute(key,value)
-- To read data at UI , use Syntax EL: ${key}
-- To print `[[${key}]]` (or) `th:text="${key}"`
-- BindingAwareModelMap(C) is impl class selected by WEB MVC.This object is handled by Spring container.
-- Value is Object type : any type is valid. Primitive/Object/Collection
-
-**Case 1:** Sending Primitives
-
-**StudentController.java**
-```java
-@Controller("/student")
-public class StudentController {
-    @GetMapping("/show")
-    public String showData(Model model){
-      System.out.println(model.getClass().getName());
-      model.addAttribute("sid", 10);
-      model.addAttribute("sname", "AA");
-      return "StdData";
-    }
-}
-```
-**StdData.html**
-```html
-<html xmlns:th="https://www.thymeleaf.org/">
-  <head>
-    <title>WELCOME</title>
-  </head>
-
-  <body>
-    <p>Data is [[${sid}]],[[${sname}]]</p>
-  </body>
-</html>
-```
-
-**Case 2:** Sending Object
-
-**Student.java**
-```java
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Student {
-  private Integer sid;
-  private String sname;
-  private Double sfee;
-}
-```
-
-**StudentController.java**
-```java
-@Controller("/student")
-public class StudentController {
-    @GetMapping("/show")
-    public String showData(Model model){
-      Student s1 = new Student(101,"AA", 200.0);
-      model.addAttribute("sob", s1);
-      return "StdData";
-    }
-}
-```
-**StdData.html**
-```html
-<html xmlns:th="https://www.thymeleaf.org/">
-
-<head>
-    <title>WELCOME</title>
-</head>
-
-<body>
-    <p> Data is [[${sob}]],[[${sob.sid}]]</p>
-    <p th:text="${sob}"></p>
-    <p th:text="${sob.sid}"></p>
-    <p th:text="${sob.sname}"></p>
-</body>
-
-</html>
-```
-
-**Case 3:** Sending Collection
-
-**StudentController.java**
-```java
-@Controller("/student")
-public class StudentController {
-    @GetMapping("/show")
-    public String showData(Model model){
-      List<Student> list = Arrays.asList(
-                    new Student(100, "AA", 2500.0),
-                    new Student(101, "BA", 2900.0),
-                    new Student(102, "AC", 2800.0),
-                    new Student(103, "FF", 2600.0) );
-      model.addAttribute("list", list);
-      return "StdData";
-    }
-}
-```
-**StdData.html**
-```html
-<html xmlns:th="https://www.thymeleaf.org/">
-
-<head>
-    <title>WELCOME</title>
-</head>
-
-<body>
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>NAME</th>
-            <th>FEE</th>
-        </tr>
-        <tr th:each="ob:${list}">
-            <td>[[${ob.sid}]]</td>
-            <td>[[${ob.sname}]]</td>
-            <td>[[${ob.sfee}]]</td>
-        </tr>
-    </table>
-    <hr />
-    <p> Data is [[${list}]]</p>
-    <p th:text="${list}"></p>
-</body>
-
-</html>
-```
