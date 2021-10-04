@@ -586,7 +586,7 @@ public class EmployeeController {
 }
 ```
 
-## Spring Boot + Thymeleaf Form (Bi-Directional Form)
+## Spring Boot Web MVC + Thymeleaf Form (Bi-Directional Form)
 
 ### [SpringBootWebMvcThymeleafForm](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/SpringBootWebMvc/SpringBootWebMvcThymeleafForm)
 
@@ -618,6 +618,36 @@ public class EmployeeController {
 
 **Step :3** send object from controller while calling UI(Edit)Page.  
  model.addAttribute("objectName",\_\_\_\_\_\_);
+
+## Redirect and Attributes
+
+### [Spring Boot Web Mvc Redirect](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/SpringBootWebMvc/SpringBootWebMvcRedirect)
+
+###### 4th October 2021
+
+- In servlets (in adv java) sendRedirect, execute one resource and move to another one for final response.
+- redirect can be implemented in Spring Controllers also. ie Execute multiple controller methods for single request.\
+  Request--> Controller#m1() -->redirect-->Controller#m2() --> Response
+- Inplace of ViewName in Return Statement, provide redirect:url
+- Incase of Redirect, last method executed in chain will provide response back to browser.
+
+**ex:**
+
+```java
+@Controller
+class HomeController {
+   @GetMapping("/show")
+   public String showData() {
+     return "redirect:find"; //redirect:URL
+   }
+
+   @GetMapping("/find")
+  public String findData() {
+     return "HomePage"; //ViewName
+   }
+
+}
+```
 
 ## FAQ
 
