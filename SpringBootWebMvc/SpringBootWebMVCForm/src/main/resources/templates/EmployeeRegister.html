@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Register Page</title>
+</head>
+
+<body>
+	<h3>EMPLOYEE REGISTER PAGE</h3>
+	<pre>
+		<form method="post" action="create">
+			NAME : <input type="text" name="empName">
+			PASS : <input type="password" name="empPwd">
+			GEN : <input type="radio" name="empGen" value="Male"> Male <input type="radio" name="empGen" value="Female">
+			Female
+			ADDR : <textarea name="empAddr"></textarea>
+			PROJ : <select name="empProj">
+				<option>-SELECT-</option>
+				<option>MNO</option>
+				<option>AA</option>
+				<option>XYZ</option>
+			</select>
+			LANGS:
+			<input type="checkbox" name="empLangs" value="ENG"> ENG
+			<input type="checkbox" name="empLangs" value="HIN"> HIN
+			<input type="checkbox" name="empLangs" value="TEL"> TEL
+			CLIENTS: <select name="empClients" size="4" multiple>
+				<option>NIT</option>
+				<option>ORCL</option>
+				<option>HTC</option>
+				<option>IJK</option>
+				<option>TTT</option>
+			</select>
+			<input type="submit" value="Create" />
+		</form>
+	</pre>
+</body>
+
+</html>
