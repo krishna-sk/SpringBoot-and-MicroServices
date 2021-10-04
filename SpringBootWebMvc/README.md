@@ -1,5 +1,30 @@
 # Spring Boot Web MVC
 
+### Table of Contents
+
+- [Spring Boot Web MVC](#spring-boot-web-mvc)
+  - Project\
+    [SpringBootWebMvcFirstApp](#springbootwebmvcfirstapp)\
+    [SpringBootWebMvcJSPFirstApp](#springbootwebmvcjspfirstapp)
+- [Spring Boot Web MVC + Thymeleaf UI](#spring-boot-web-mvc--thymeleaf-ui)
+  - Project\
+    [SpringBootWebMvcThymeleafBasic](#springbootwebmvcthymeleafbasic)
+- [Create Executable WAR and run](#create-executable-war-and-run)
+- [Rules for defining controller](#rules-for-defining-controller)
+- [Sending Data from Controller to UI (View)](#sending-data-from-controller-to-ui-view)
+- [HTML Forms (Model Attribute)](#html-forms-model-attribute)
+  - Project\
+    [SpringBootWebMVCForm](#springbootwebmvcform)
+- [Spring Boot Web MVC + Thymeleaf Form (Bi-Directional Form)](#spring-boot-web-mvc--thymeleaf-form-bi-directional-form)
+  - Project\
+    [SpringBootWebMvcThymeleafForm](#springbootwebmvcthymeleafform)
+- [Redirect and Attributes](#redirect-and-attributes)
+  - Project\
+    [Spring Boot Web Mvc Redirect](#spring-boot-web-mvc-redirect)\
+    [Spring Boot Web Mvc CRUD](#spring-boot-web-mvc-crud)
+
+## Spring Boot Web MVC
+
 ### [SpringBootWebMvcFirstApp](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/SpringBootWebMvc/SpringBootWebMvcFirstApp)
 
 ###### 23rd September 2021
@@ -407,7 +432,7 @@ class UserController(){
     To set your own context path(project name in URL) use application.properties
     **Ex:** server.servlet.context-path=/project-name
 
-## Sending Data from Controller to UI(View)
+## Sending Data from Controller to UI (View)
 
 ###### 29th September 2021
 
@@ -622,6 +647,8 @@ public class EmployeeController {
 ## Redirect and Attributes
 
 ### [Spring Boot Web Mvc Redirect](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/SpringBootWebMvc/SpringBootWebMvcRedirect)
+
+### [Spring Boot Web Mvc CRUD](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/SpringBootWebMvc/Spring%20Boot%20WEB%20MVC%20CRUD)
 
 ###### 4th October 2021
 
