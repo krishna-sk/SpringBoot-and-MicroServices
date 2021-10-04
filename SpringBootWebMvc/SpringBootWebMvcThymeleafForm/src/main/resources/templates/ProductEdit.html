@@ -1,0 +1,37 @@
+<html>
+	<head>
+		<title>EDIT PAGE</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+	</head>
+	<body>
+	<div class="container">
+		<div class="card">
+			<div class="card-header bg-primary text-white text-center">
+				<h3>PRODUCT EDIT PAGE</h3>
+			</div>
+			<div class="card-body">
+			
+			
+		<form th:action="@{/product/update}" method="POST" th:object="${product}">
+			ID  : <input type="text" th:field="*{id}" class="form-control"/>
+			NAME: <input type="text" th:field="*{name}" class="form-control"/>
+			COST: <input type="number" th:field="*{cost}" class="form-control"/>
+			TYPE: 
+			<input type="radio" th:field="*{type}" value="A"/>A
+			<input type="radio" th:field="*{type}" value="B"/>B
+			<input type="radio" th:field="*{type}" value="C"/>C
+			<br/>
+			BRAND: <select th:field="*{brand}" class="form-control">
+						<option value="">-SELECT-</option>
+						<option value="NIT">NIT</option>
+						<option value="XYZ">XYZ</option>
+						<option value="MNO">MNO</option>
+					</select>
+			NOTE : <textarea th:field="*{note}" class="form-control"></textarea>
+				<button type="submit" class="btn btn-success">Update</button>					
+		</form>
+		</div>
+	   </div>
+	</div>
+	</body>
+</html>
