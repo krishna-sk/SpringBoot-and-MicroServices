@@ -546,7 +546,9 @@ public class StudentController {
 
 ## HTML Forms (Model Attribute)
 
-###### 30th September 2021
+### [SpringBootWebMVCForm](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/SpringBootWebMvc/SpringBootWebMVCForm)
+
+###### 30th September, 1st October 2021
 
 - Spring Container converts form data into Object format when we click on submit button.
 - Spring Container is
@@ -567,7 +569,11 @@ public class StudentController {
   <textarea name="varibaleName">
   ```
 
-  - Finally read object in Controller Class
+  - Finally read object in Controller Class\
+    Using Syntax:\
+    @ModelAttribute ClassName objectName\
+    Ex:\
+    @ModelAttribute Employee employee
 
 ```java
 @Controller("/employee")
