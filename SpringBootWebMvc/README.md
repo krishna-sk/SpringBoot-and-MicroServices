@@ -586,6 +586,39 @@ public class EmployeeController {
 }
 ```
 
+## Spring Boot + Thymeleaf Form (Bi-Directional Form)
+
+### [SpringBootWebMvcThymeleafForm](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/SpringBootWebMvc/SpringBootWebMvcThymeleafForm)
+
+###### 2nd October 2021
+
+**HTML Form :-** (Uni-Directional)
+
+- Form data is converted into Object Format when we click on submit button.
+- Object data , if you want to reload into Form, may not be supported.
+
+**Thymeleaf Form :-** (Bi-Directional Form)
+
+- Form data can be converted into Obejct format (On submit),
+  even Object data can be loaded into Form (On edit Operation).
+
+**Step : 1** Bind your form with object (Command Object)
+
+```html
+<form th:action="@{/fullpath}" method="" th:object="${objectName}"></form>
+```
+
+**Step : 2** Bind Form Input with variable (set/get methods)
+
+```html
+<input type="" th:field="*{variableName}" ____ />
+<textarea th:field="*{variableName}"> </textarea>
+<select th:field="*{variableName}"></select>
+```
+
+**Step :3** send object from controller while calling UI(Edit)Page.  
+ model.addAttribute("objectName",\_\_\_\_\_\_);
+
 ## FAQ
 
 **Q) In how many ways end user can make request using browser?**\
