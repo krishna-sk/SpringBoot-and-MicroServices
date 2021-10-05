@@ -28,6 +28,10 @@ public class Employee {
 
 	private String name;
 
+	private String gender;
+
+	private String email;
+
 	private Double salary;
 
 	private String department;

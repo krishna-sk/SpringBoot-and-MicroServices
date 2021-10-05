@@ -650,7 +650,7 @@ public class EmployeeController {
 
 ### [Spring Boot Web Mvc CRUD](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/SpringBootWebMvc/Spring%20Boot%20WEB%20MVC%20CRUD)
 
-###### 4th October 2021
+###### 4th,5th October 2021
 
 - In servlets (in adv java) sendRedirect, execute one resource and move to another one for final response.
 - redirect can be implemented in Spring Controllers also. ie Execute multiple controller methods for single request.\
@@ -675,6 +675,8 @@ class HomeController {
 
 }
 ```
+
+**@ResponseBody :** This is used return data as given format(String,json,xml) do not goto ViewResolver.
 
 ## FAQ
 

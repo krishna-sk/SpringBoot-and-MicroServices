@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.krishna.entity.Employee;
 import com.krishna.repository.EmployeeRepository;
+import com.krishna.util.EmployeeUtil;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -15,12 +16,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	EmployeeRepository employeeRepository;
 
+	@Autowired
+	EmployeeUtil employeeUtil;
+
 	@Override
 	public Integer saveEmployee(Employee employee) {
 
-		double salary = employee.getSalary();
-		employee.setHra(salary*12/100.0);
-		employee.setTa(salary*3/100.0);
+		employeeUtil.calculateHraAndTa(employee);
 		return employeeRepository.save(employee).getId();
 	}
 
@@ -45,7 +47,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public void updateEmployee(Employee employee) {
+		employeeUtil.calculateHraAndTa(employee);
 		employeeRepository.save(employee);
+	}
+
+	@Override
+	public boolean isEmployeeEmailExists(String email) {
+//		return true;
+		return employeeRepository.getEmployeeEmailCount(email) > 0;
 	}
 
 }

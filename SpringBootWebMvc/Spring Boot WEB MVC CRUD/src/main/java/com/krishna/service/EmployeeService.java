@@ -16,4 +16,6 @@ public interface EmployeeService {
 
 	void updateEmployee(Employee employee);
 
+	boolean isEmployeeEmailExists(String email);
+
 }

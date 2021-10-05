@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.krishna.entity.Employee;
@@ -30,12 +31,18 @@ public class EmployeeController {
 	}
 
 	// 2. save operation
+	/*
+	 * here we need to specify the name as "emp" for @ModelAttribute, as we bind
+	 * th:object as "emp" in the EmployeeRegister form || \/ <form method="post"
+	 * th:action="@{/employee/save}" th:object="${emp}">
+	 */
 	@PostMapping("/save")
-	public String saveData(@ModelAttribute Employee employee, // reading form data
+	public String saveData(@ModelAttribute(name = "emp") Employee employee, // reading form data
 			Model model) {
 		Integer id = employeeService.saveEmployee(employee); // store in db
 		String message = "Employee '" + id + "' Created!"; // create message
 		model.addAttribute("message", message); // send message to ui
+		model.addAttribute("emp", new Employee());
 		return "EmployeeRegister";
 	}
 
@@ -54,6 +61,37 @@ public class EmployeeController {
 		employeeService.deleteEmployee(id);
 		attributes.addAttribute("message", "Employee '" + id + "' deleted");
 		return "redirect:all";
+	}
+
+	// 5. show edit
+	@GetMapping("/edit")
+	public String showEdit(@RequestParam Integer id, Model model) {
+		Employee employee = employeeService.getEmployeeById(id);
+		model.addAttribute("employee", employee);
+		return "EmployeeEdit";
+	}
+
+	// 6. do update
+	@PostMapping("/update")
+	public String updateData(@ModelAttribute Employee employee, RedirectAttributes attributes) {
+		employeeService.updateEmployee(employee);
+		attributes.addAttribute("message", "Employee '" + employee.getId() + "' Updated!");
+		return "redirect:all";
+	}
+
+	// 7. emialId exists or not
+	/*
+	 * this method will give reponse as string not as html page. since we annotated
+	 * it with @ResponseBody
+	 */
+	@GetMapping("/validate")
+	@ResponseBody
+	public String validateEmail(@RequestParam String email) {
+		String message = "not exists";
+		if (employeeService.isEmployeeEmailExists(email)) {
+			return email + " already exits ";
+		}
+		return message;
 	}
 
 }
