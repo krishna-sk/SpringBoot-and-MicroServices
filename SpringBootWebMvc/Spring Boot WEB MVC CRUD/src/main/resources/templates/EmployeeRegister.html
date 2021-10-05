@@ -13,19 +13,19 @@
 		<div class="card mt-5" style="width: 30rem;">
 			<div class="card-body">
 				<h2 class="text-center text-primary">Employee Register</h2>
-				<form method="post" th:action="@{/employee/save}">
+				<form method="post" th:action="@{/employee/save}" th:object="${emp}">
 					<div class="mb-3">
 						<label for="name" class="form-label">NAME</label>
-						<input type="text" class="form-control" id="name" name="name">
+						<input type="text" class="form-control" id="name" th:field="*{name}">
 					</div>
 					<div class="mb-3">
 						<label for="salary" class="form-label">SALARY</label>
-						<input type="number" min="1" class="form-control" id="salary" name="salary">
+						<input type="number" min="1" class="form-control" id="salary" th:field="*{salary}">
 					</div>
 					<div class=" mb-3">
 						<label for="department" class="form-label">DEPARTMENT</label>
-						<select class="form-select" name="department">
-							<option selected>SELECT</option>
+						<select class="form-select" th:field="*{department}">
+							<option value="" selected>SELECT</option>
 							<option value="DEV">DEV</option>
 							<option value="QA">QA</option>
 							<option value="BA">BA</option>

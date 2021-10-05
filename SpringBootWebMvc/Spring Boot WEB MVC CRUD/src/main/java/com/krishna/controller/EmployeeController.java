@@ -18,13 +18,14 @@ import com.krishna.service.EmployeeService;
 @Controller
 @RequestMapping("/employee")
 public class EmployeeController {
-	
+
 	@Autowired
 	EmployeeService employeeService;
 
 	// 1. show Register page
 	@GetMapping("/register")
-	public String showReg() {
+	public String showReg(Model model) {
+		model.addAttribute("emp", new Employee());
 		return "EmployeeRegister";
 	}
 
