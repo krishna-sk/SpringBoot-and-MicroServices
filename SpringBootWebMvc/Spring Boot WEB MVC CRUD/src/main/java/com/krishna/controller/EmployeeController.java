@@ -1,8 +1,9 @@
 package com.krishna.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,9 +49,11 @@ public class EmployeeController {
 
 	// 3. display data
 	@GetMapping("/all")
-	public String getAll(@RequestParam(required = false) String message, Model model) {
-		List<Employee> list = employeeService.getAllEmployees();
-		model.addAttribute("list", list);
+	public String getAll(@PageableDefault(page = 0, size = 10) Pageable pageable,
+			@RequestParam(required = false) String message, Model model) {
+		Page<Employee> page = employeeService.getAllEmployees(pageable);
+		model.addAttribute("list", page.getContent());
+		model.addAttribute("page", page);
 		model.addAttribute("message", message);
 		return "EmployeeData";
 	}
@@ -93,5 +96,7 @@ public class EmployeeController {
 		}
 		return message;
 	}
+
+	// 8.
 
 }

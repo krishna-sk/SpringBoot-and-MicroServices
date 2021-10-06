@@ -9,8 +9,40 @@
 </head>
 
 <body class="bg-secondary">
-	<div class="container d-flex justify-content-center">
-		<div class="card mt-5" style="width: auto;">
+	<div class="container">
+		<div class="mt-5">
+			<nav aria-label="Page navigation example">
+				<ul class="pagination justify-content-center">
+					<li class="page-item" th:if="${!page.isFirst()}">
+						<a class="page-link" th:href="@{/employee/all(page=0)}">First</a>
+					</li>
+					<li class="page-item" th:if="${page.hasPrevious()}">
+						<a class="page-link" th:href="@{/employee/all(page=${page.getNumber()-1})}">Previous</a>
+					</li>
+	
+					<th:block th:each="i:${#numbers.sequence(page.getNumber(),page.getNumber()+9)}">
+						<th:block th:if="${i==page.getNumber() AND i<=page.getTotalPages()-1}">
+							<li class="page-item active">
+								<a class="page-link" th:href="@{/employee/all(page=${i})}">[[${i+1}]]</a>
+							</li>
+						</th:block>
+						<th:block th:if="${i!=page.getNumber() AND i<=page.getTotalPages()-1}">
+							<li class="page-item">
+								<a class="page-link" th:href="@{/employee/all(page=${i})}">[[${i+1}]]</a>
+							</li>
+						</th:block>
+					</th:block>
+	
+					<li class="page-item" th:if="${page.hasNext()}">
+						<a class="page-link" th:href="@{/employee/all(page=${page.getNumber()+1})}">Next</a>
+					</li>
+					<li class="page-item" th:if="${!page.isLast()}">
+						<a class="page-link" th:href="@{/employee/all(page=${page.getTotalPages()-1})}">Last</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+			<div class="card mt-2" style="width: 80rem;">
 			<div class="card-body">
 				<table class="table table-bordered table-hover">
 					<thead>
@@ -23,6 +55,7 @@
 							<th class="text-center" scope="col">HRA</th>
 							<th class="text-center" scope="col">TA</th>
 							<th class="text-center" scope="col">DEPT</th>
+							<th class="text-center" scope="col">DOJ</th>
 							<th class="text-center" scope="col">OPERATION</th>
 						</tr>
 					</thead>
@@ -36,6 +69,7 @@
 							<td class="text-center">[[${ob.hra }]]</td>
 							<td class="text-center">[[${ob.ta}]]</td>
 							<td class="text-center">[[${ob.department}]]</td>
+							<td class="text-center">[[${ob.doj}]]</td>
 							<td class="text-center">
 								<a class="btn btn-danger" th:href="@{/employee/remove(id=${ob.id})}">DELETE</a> |
 								<a class="btn btn-warning" th:href="@{/employee/edit(id=${ob.id})}">EDIT</a>

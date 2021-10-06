@@ -678,6 +678,31 @@ class HomeController {
 
 **@ResponseBody :** This is used return data as given format(String,json,xml) do not goto ViewResolver.
 
+### Pagination
+
+###### 06th October 2021
+
+**Pagination :** By deafult we use findAll(), which gets all rows from DB table. But this tiem we are using findAll(Pageable pageable) which returns Page\<T\>\
+Pageble = Page Number and Page Size.\
+We need to provide default pageNumber and pageSize if user do not provide any pagenumber and size.\
+**ex**\
+[http://localhost:/all]()\
+[http://localhost:/all?page=1&size=3]()
+
+#### Date
+
+**@DateTimeFormat :** Form input (String) converts into Date Object\
+**@Temporal :** Date model class variable is converted into Database Column
+
+#### Image
+
+- We dont store images in the database generally. We store the images to the cloud and then save the image path in the database.
+- use any cloud location to store one image. Store Image Path inside DB.\
+ **ex :**\
+https://imgdb.com/ (FREE)\
+AWS s3 bucket (paid service)
+  
+
 ## FAQ
 
 **Q) In how many ways end user can make request using browser?**\

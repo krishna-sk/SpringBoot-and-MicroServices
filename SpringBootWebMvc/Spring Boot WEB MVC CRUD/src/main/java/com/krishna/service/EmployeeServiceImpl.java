@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.krishna.entity.Employee;
@@ -28,8 +30,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public List<Employee> getAllEmployees() {
-
 		return employeeRepository.findAll();
+	}
+
+	@Override
+	public Page<Employee> getAllEmployees(Pageable pageable) {
+		return employeeRepository.findAll(pageable);
 	}
 
 	@Override
@@ -53,7 +59,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public boolean isEmployeeEmailExists(String email) {
-//		return true;
 		return employeeRepository.getEmployeeEmailCount(email) > 0;
 	}
 

@@ -35,11 +35,19 @@
 					<div class=" mb-3">
 						<label for="department" class="form-label">DEPARTMENT</label>
 						<select class="form-select" th:field="*{department}">
-							<option value="" selected>SELECT</option>
 							<option value="DEV">DEV</option>
 							<option value="QA">QA</option>
 							<option value="BA">BA</option>
+							<option value="sales">sales</option>
+							<option value="Human Resources">Human Resources</option>
+							<option value="Services">Services</option>
+							<option value="Bussiness Development">Bussiness Development</option>
+							<option value="Training">Training</option>
 						</select>
+					</div>
+					<div class="mb-3">
+						<label for="date" class="form-label">DOJ</label>
+						<input type="date" class="form-control" id="date" th:field="*{doj}">
 					</div>
 					<div class="d-grid gap-2">
 						<button type="submit" class="btn btn-success ">
