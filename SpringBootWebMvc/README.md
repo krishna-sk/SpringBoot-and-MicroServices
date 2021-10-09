@@ -698,10 +698,63 @@ We need to provide default pageNumber and pageSize if user do not provide any pa
 
 - We dont store images in the database generally. We store the images to the cloud and then save the image path in the database.
 - use any cloud location to store one image. Store Image Path inside DB.\
- **ex :**\
-https://imgdb.com/ (FREE)\
-AWS s3 bucket (paid service)
-  
+   **ex :**\
+  https://imgdb.com/ (FREE)\
+  AWS s3 bucket (paid service)
+
+### ModelAndView
+
+###### 07th October 2021
+
+- It is a combination of Model(Data) and View(String/UI PageName).We can provide both data and UI pagename from controller to FrontController.
+
+##### Case 1 : Controller Method without data only viewname
+
+```java
+-----------------Old code-------------
+ @GetMapping("/show")
+ public ModelAndView showPage(){
+	ModelAndView m = new ModelAndView();
+	m.setViewName("HomePage");
+	return m;
+ }
+```
+
+- it is a class, not recomanded to work with direct classes in Spring Boot.
+- object is created manually by programmer as local variable.
+- only viewName is set, Model memory is created/allocated but not used.
+
+```java
+----------------New code--------------
+ @GetMapping("/show")
+ public String showPage(){
+	return "HomePage";
+ }
+```
+
+##### Case 2 : Controller Method with data and viewname
+
+```java
+---------------Old code-----------
+ @GetMapping("/show")
+ public ModelAndView showPage(){
+	ModelAndView m = new ModelAndView();
+	m.addObject("sid",10);
+	m.addObject("sname","AA");
+	m.setViewName("HomePage");
+	return m;
+ }
+
+---------------New code-----------
+ @GetMapping("/show")
+ public String showPage(Model model){
+        model.addAttribute("sid",10);
+        model.addAttribute("sname","AA");
+	return "HomePage";
+ }
+```
+
+- Model(I) impl class is BindingAwareModelMap(C) which clears data on response commit. Where ModelAndView uses ModelMap(C) which stores data until contains destory as single object.
 
 ## FAQ
 
