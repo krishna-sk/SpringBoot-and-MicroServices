@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.krishna.entity.Employee;
 import com.krishna.service.EmployeeService;
+import com.krishna.view.EmployeeExcelView;
+import com.krishna.view.EmployeePdfView;
 
 @Controller
 @RequestMapping("/employee")
@@ -84,7 +87,7 @@ public class EmployeeController {
 
 	// 7. emialId exists or not
 	/*
-	 * this method will give reponse as string not as html page. since we annotated
+	 * this method will give response as string not as html page. since we annotated
 	 * it with @ResponseBody
 	 */
 	@GetMapping("/validate")
@@ -97,6 +100,22 @@ public class EmployeeController {
 		return message;
 	}
 
-	// 8.
+	// 8. Excel Export
+	@GetMapping("/excel")
+	public ModelAndView exportToExcel() {
+		ModelAndView m = new ModelAndView();
+		m.setView(new EmployeeExcelView());
+		m.addObject("list", employeeService.getAllEmployees());
+		return m;
+	}
+
+	// 9. Excel Export
+	@GetMapping("/pdf")
+	public ModelAndView exportToPdf() {
+		ModelAndView m = new ModelAndView();
+		m.setView(new EmployeePdfView());
+		m.addObject("list", employeeService.getAllEmployees());
+		return m;
+	}
 
 }

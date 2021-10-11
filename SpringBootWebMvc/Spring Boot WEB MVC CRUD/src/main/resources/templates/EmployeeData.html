@@ -19,7 +19,7 @@
 					<li class="page-item" th:if="${page.hasPrevious()}">
 						<a class="page-link" th:href="@{/employee/all(page=${page.getNumber()-1})}">Previous</a>
 					</li>
-	
+
 					<th:block th:each="i:${#numbers.sequence(page.getNumber(),page.getNumber()+9)}">
 						<th:block th:if="${i==page.getNumber() AND i<=page.getTotalPages()-1}">
 							<li class="page-item active">
@@ -32,7 +32,7 @@
 							</li>
 						</th:block>
 					</th:block>
-	
+
 					<li class="page-item" th:if="${page.hasNext()}">
 						<a class="page-link" th:href="@{/employee/all(page=${page.getNumber()+1})}">Next</a>
 					</li>
@@ -42,8 +42,10 @@
 				</ul>
 			</nav>
 		</div>
-			<div class="card mt-2" style="width: 80rem;">
+		<div class="card mt-2" style="width: 80rem;">
 			<div class="card-body">
+				<a th:href="@{/employee/excel}" class="btn btn-success">EXCEL EXPORT</a> | <a th:href="@{/employee/pdf}"
+					class="btn btn-warning">PDF EXPORT</a>
 				<table class="table table-bordered table-hover">
 					<thead>
 						<tr>
