@@ -707,6 +707,11 @@ We need to provide default pageNumber and pageSize if user do not provide any pa
 ###### 07th October 2021
 
 - It is a combination of Model(Data) and View(String/UI PageName).We can provide both data and UI pagename from controller to FrontController.
+- It is used as ReturnType to Controller#methods.
+- Legacy return type.
+- ModelAndView(C) --- ModelMap(C) and View(Object-String/View(I))
+- ModelAndView(C) object must be created inside Controller#method by programmer.
+- Do not use a Direct class, use always interface and container chooses better Impl class.
 
 ##### Case 1 : Controller Method without data only viewname
 
@@ -745,6 +750,7 @@ We need to provide default pageNumber and pageSize if user do not provide any pa
 	return m;
  }
 
+
 ---------------New code-----------
  @GetMapping("/show")
  public String showPage(Model model){
@@ -755,6 +761,145 @@ We need to provide default pageNumber and pageSize if user do not provide any pa
 ```
 
 - Model(I) impl class is BindingAwareModelMap(C) which clears data on response commit. Where ModelAndView uses ModelMap(C) which stores data until contains destory as single object.
+
+### Export data into Excel/PDF
+
+###### 09th October 2021
+
+- Spring Boot supports exporting data into Excel/PDF formats using View classes.
+- By using 3rd party APIS : Apache poi(Excel), itext(PDF)
+- So, far view is HTML, now view is Excel,PDF.
+
+**Excel Files**
+
+- Excel File --- Workbook
+- Workbook : is created by Spring Boot using Apache POI
+- Workbook --- n Sheets
+- Sheet --- n Rows (Row number starts from zero)
+- Row --- n Cells (Cell number starts from zero)
+
+  **Maven Dependency**
+
+```xml
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
+      <version>3.17</version>
+   </dependency>
+   <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-ooxml</artifactId>
+      <version>3.17</version>
+   </dependency>
+```
+
+**Excel View Class**
+
+```java
+public class SampleExcelExport extends AbstractXlsView {
+
+	@Override
+	protected void buildExcelDocument(
+			Map<String, Object> model,
+			Workbook workbook,
+			HttpServletRequest request,
+			HttpServletResponse response)
+					throws Exception {
+
+		response.addHeader("Content-Disposition", "attachment;filename=samples.xls");
+
+		Sheet sheet = workbook.createSheet("TEST ONE");
+
+		Row r1 = sheet.createRow(0);
+		r1.createCell(0).setCellValue("Sl.No");
+		r1.createCell(1).setCellValue("NAME");
+		r1.createCell(2).setCellValue("CODE");
+
+		Row r2 = sheet.createRow(1);
+		r2.createCell(0).setCellValue("101");
+		r2.createCell(1).setCellValue("AJAY");
+		r2.createCell(2).setCellValue("AA-7459");
+
+		String message = (String) model.get("title");
+		Row r3 = sheet.createRow(2);
+		r3.createCell(3).setCellValue(message);
+	}
+}
+```
+
+**Controller Method**
+
+```java
+@GetMapping("/excel")
+	public ModelAndView showExcelData() {
+		ModelAndView m = new ModelAndView();
+		m.setView(new SampleExcelExport());;
+		m.addObject("title", "WELCOME TO NIT");
+		return m;
+	}
+```
+
+**PDF Files**
+
+**Maven Dependency**
+
+```xml
+    <dependency>
+      <groupId>com.lowagie</groupId>
+      <artifactId>itext</artifactId>
+      <version>2.1.7</version>
+   </dependency>
+```
+
+**PDF View Class**
+
+```java
+public class SamplePdfView extends AbstractPdfView {
+
+	@Override
+	protected void buildPdfDocument(
+			Map<String, Object> model,
+			Document document,
+			PdfWriter writer,
+			HttpServletRequest request,
+			HttpServletResponse response)
+					throws Exception
+	{
+
+		response.addHeader("Content-Disposition", "attachment;filename=sample.pdf");
+
+		String title = (String) model.get("title");
+
+		Paragraph p = new Paragraph(title);
+		p.setSpacingAfter(25.0f);
+		document.add(p);
+
+		PdfPTable table = new PdfPTable(3);
+		table.addCell("Slno");
+		table.addCell("name");
+		table.addCell("sal");
+
+		table.addCell("101");
+		table.addCell("AJAY");
+		table.addCell("300.0");
+
+		document.add(table);
+
+	}
+}
+```
+
+**Controller Method**
+
+```java
+@GetMapping("/pdf")
+	public ModelAndView showPdfData() {
+		ModelAndView m = new ModelAndView();
+		m.setView(new SamplePdfView());;
+		m.addObject("title", "WELCOME TO NIT");
+		return m;
+	}
+```
 
 ## FAQ
 
