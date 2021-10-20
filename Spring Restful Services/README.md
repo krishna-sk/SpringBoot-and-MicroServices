@@ -151,3 +151,37 @@ public class EmployeeRestController {
 }
 
 ```
+
+#### MediaType Annotations
+
+###### 18th-October-2021
+
+- Data Exchange for Global Formats like XML/JSON can be automated using MediaType annotations.\
+  ie Java Object <-----> XML/JSON
+- @RequestBody : (input/ Method Parameter)\
+  This annotation reads HTTP Request Body Section (XML/JSON) and converts into Object Format. This object is given as method parameter.
+- @ResponseBody : (output/ ReturnType)\
+  Reads ReturnType (object) and converts into XML/JSON this data is placed into Http Response Body Section.
+- @RestController = @Controller + @ResponseBody\
+  ie we need not to apply @ResponseBody externally.
+- Content-Type is used to indicate what type of data exist in current (request/response) body.
+- Above annotations works for non-String types (ClassType/Collection type) only. In case of String, content-type is plain text (text/plain) No JSON/XML Conversion is done.
+- By default Spring boot supports only JSON Format Output. To get XML Output, add below dependency in pom.xml, run application, while making request send Header Param [Accept = application/xml] output will be XML Output (or) 406 Not Acceptable
+
+```xml
+    <dependency>
+     <groupId>com.fasterxml.jackson.dataformat</groupId>
+     <artifactId>jackson-dataformat-xml</artifactId>
+    </dependency>
+```
+
+**Web MVC :** @ModelAttribute : HTML Form ---> Object ---> Controller#Method Input
+**Rest API :** @RequestBody : XML/JSON ----> Object --> RestController#Method Input
+
+###### Note:
+
+- If XML Input is not supported (@RequestBody not supporting) then Http Status is : 415 Unsupported MediaTypes.
+- If XML Output is not supported (@ResponseBody not supporting) then Http Status is : 406 Not Acceptable
+- If input (@RequestBody) not having valid XML/JSON Data then 400 BAD REQUEST
+- Sending empty JSON {} or XML <Object></Object> is valid.
+- It creates object using default constrcutor.
