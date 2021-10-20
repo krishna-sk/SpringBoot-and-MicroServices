@@ -175,7 +175,7 @@ public class EmployeeRestController {
     </dependency>
 ```
 
-**Web MVC :** @ModelAttribute : HTML Form ---> Object ---> Controller#Method Input
+**Web MVC :** @ModelAttribute : HTML Form ---> Object ---> Controller#Method Input\
 **Rest API :** @RequestBody : XML/JSON ----> Object --> RestController#Method Input
 
 ###### Note:
