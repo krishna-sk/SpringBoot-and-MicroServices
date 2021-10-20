@@ -183,5 +183,196 @@ public class EmployeeRestController {
 - If XML Input is not supported (@RequestBody not supporting) then Http Status is : 415 Unsupported MediaTypes.
 - If XML Output is not supported (@ResponseBody not supporting) then Http Status is : 406 Not Acceptable
 - If input (@RequestBody) not having valid XML/JSON Data then 400 BAD REQUEST
-- Sending empty JSON {} or XML <Object></Object> is valid.
+- Sending empty JSON {} or XML \<Object\>\</Object\> is valid.
 - It creates object using default constrcutor.
+
+#### Path variables
+
+- Request Params : to send primitives data using URL to application\
+  Syntax: URL?key=val&key=val&key=val
+- Path Variables : to send primitives data using URL to application\
+  Syntax: URL/data/data
+- Clean URL : No symbols used like ? = &
+- URL length is reduced compared to Request Params
+- Directly data is sent as Path, no key is required while sending.\
+  ex: http://localhost:8080/emp/101/ABC
+- Order must be followed (in req Param-- no order is required)
+- **Path :-** Path indicates Resource(Code) identity used by consumer to access it.
+
+- static path (regular path) : A Direct path given to a resource\
+   ex: /show, /find, /save..etc
+- dynamic path (data ) : Data/value comes at runtime\
+   Syntax in code: /{key}
+
+- Dynamic path indicates some data must be sent using URL.
+  Such data we have to read in code using annotation:
+  @PathVariable DataType keyName
+- if we pass less or more no.of Path variables , front controller Returns 404-Not found. Paths (Levels) Count must be matching.
+- IF data type is mismatch then , front controller Returns 400-Bad Request.
+
+##### Controller Class
+
+```java
+package com.demo.rest;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/employee")
+public class EmployeeRestController {
+    @GetMapping("/find/{id}/{code}")
+    public String showData(
+        @PathVariable Integer id,
+        @PathVariable String code
+    ) {
+        return "HELLO => " + id + "-" + code;
+    }
+}
+```
+
+##### Output
+
+```text
+http://localhost:8080/employee/find
+Output: 404 - Not Found
+
+http://localhost:8080/employee/find/10/SAM
+Output: HELLO => 10-SAM
+
+http://localhost:8080/employee/find/SAM/10
+Output: 400 - Bad Request
+
+http://localhost:8080/employee/find/10
+Output: 404 - Not Found
+
+http://localhost:8080/employee/find/10/SAM/200.0
+Output: 404 - Not Found
+```
+
+##### Controller Class
+
+```java
+package com.demo.rest;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/employee")
+public class EmployeeRestController {
+    @GetMapping("/find/code")
+    public String showDataA() {
+        return "HELLO STATIC ";
+    }
+    @GetMapping("/find/{code}")
+    public String showDataB(
+        @PathVariable String code
+    ) {
+        return "HELLO => " + code;
+    }
+}
+```
+
+- If Request URL is matching for both static paths and dynamic paths then priority is given to static paths.
+
+##### Output
+
+```text
+http://localhost:8080/employee/find/ABCD
+Output: HELLO => ABCD
+
+http://localhost:8080/employee/find/code
+Output: HELLO STATIC
+```
+
+- If multiple methods are having same static path and dynamic path count matching then it is : IllegalStateException: Ambiguous handler methods mapped
+  for '/employee/find/AAA':\
+  EmployeeRestController.showDataA(String),\
+  EmployeeRestController.showDataB(String)}
+
+---
+
+Case-study:-\
+m1() -- /home/find/test\
+m2() -- /home/find/{test}\
+m3() -- /home/{find}/{test}\
+m4() -- /{home}/{find}/{test}
+
+**Req#1** : .../home/home/home\
+ Matching :m3(), m4()\
+ selected: m3()
+
+**Req#2** :.../home/find/200.0
+Matching : m2(), m3(), m4()\
+ Selected : m2()
+
+**Req#3** : .../home/Find/test
+Matching : m3(), m4()\
+ selected : m3()
+
+##### Controller Class
+
+```java
+package com.demo.rest;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+@RestController
+@RequestMapping("/employee")
+public class EmployeeRestController {
+    @GetMapping("/find/grade/code")
+    public String showDataA() {
+        return "HELLO :: A ";
+    }
+    @GetMapping("/find/grade/{code}")
+    public String showDataB(
+        @PathVariable String code
+    ) {
+        return "HELLO :: B " + code;
+    }
+    @GetMapping("/find/{grade}/{code}")
+    public String showDataC(
+        @PathVariable String grade,
+        @PathVariable String code
+    ) {
+        return "HELLO :: C " + grade + "-" + code;
+    }
+}
+
+```
+
+##### Output
+
+```text
+http://localhost:8080/employee/find/grade/code
+Output: HELLO :: A
+
+http://localhost:8080/employee/find/grade/ABC
+Output: HELLO :: B ABC
+
+http://localhost:8080/employee/find/ABC/grade
+Output: HELLO :: C ABC grade
+```
+
+**Possible Return Types for RestController methods:**
+
+- String, ClassType/Custom Type, Collection Type...
+- But mostly used format is:-\
+  ResponseEntity<T> = Body + Http Status + Header Params
+  [ it is equal to creating : HTTP Response ]
+- HttpStatus : it is enum , given by HTTP protocol to indicates universal codes, for every programming language.
+- Every Response must have Http Status. No default value.
+  On success : 200 OK, Consumer Data Wrong : 400 BAD REQUEST,
+  Server problem/exception : 500 INTERNAL SERVER ERROR...etc
+- Http Headers (Can be pre-defined/user-defined too) indicates task/input/action to producer/consumer. Data must be passed using key=val in header section.\
+  ex:\
+   Content-Type : application/json\
+   Refresh : 5; google.com\
+   Content-Length : 500 ...etc
