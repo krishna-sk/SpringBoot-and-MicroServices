@@ -376,3 +376,19 @@ Output: HELLO :: C ABC grade
    Content-Type : application/json\
    Refresh : 5; google.com\
    Content-Length : 500 ...etc
+
+###### 25-October-2021
+
+**Serializable(I)** : To write an object to a network/stream/file such classType must be Serializable. Incase Serializable(I) recommended to give id for every class using serialVersionUID. if not provided JVM allocates default.
+
+**@Transactional :** for pre-defined repository methods, need not to define externally. For custom non-select operations you must provide this.
+
+- 1 Endpoint - Define one method for one Operation in RestController
+- 1 Rest API - Define full class (RestController) with multiple Endpoints.
+- For Consumer We provide Endpoint details -- URL, HttpMethod, Input/Output Header details..etc
+- @ModelAttribute : Form ---> Object (given as Input)
+- @RequestBody : XML/JSON --> Object (given as Input)
+- 200 OK : Http status indicates Request process is successful.
+- 201 CREATED: Status indicates Request process is successful + a new Resource is created at Producer/Server side.[ Resource : file/DB/... ]
+- Symbol ? (wildcard char) indicates data-type for Generic is decided at runtime.
+- For ReturnType non-String(List/Product..etc) then @RestController provides @ResponseBody, that converts data into JSON format.
