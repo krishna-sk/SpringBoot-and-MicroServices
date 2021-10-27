@@ -21,11 +21,13 @@ import com.krishna.service.ProductService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/rest/product")
 @Api(description = "Test Product Operation")
+@Slf4j
 public class ProductController {
 
 	@Autowired
@@ -35,9 +37,10 @@ public class ProductController {
 	@PostMapping("/save")
 	@ApiOperation("Create Product")
 	public ResponseEntity<String> createProduct(@RequestBody Product product) {
+		log.info("Entered into Create Product Method");
 		Integer id = productService.saveProduct(product);
 		String body = "Product '" + id + "' created!";
-
+		log.info("About to leave the Create Product Method");
 		return new ResponseEntity<String>(body, HttpStatus.CREATED); // 201 new object is created
 	}
 
@@ -45,7 +48,9 @@ public class ProductController {
 	@GetMapping("/all")
 	@ApiOperation("Fetch all Products as List")
 	public ResponseEntity<List<Product>> fetchAllProducts() {
+		log.info("Entered into fetch All Products Method");
 		List<Product> list = productService.getAllProducts();
+		log.info("About to leave the fetch All Products Method");
 		return new ResponseEntity<List<Product>>(list, HttpStatus.OK);
 	}
 
@@ -53,16 +58,19 @@ public class ProductController {
 	@GetMapping("/one/{id}")
 	@ApiOperation("Fetch Product by Id")
 	public ResponseEntity<?> fetchOneProduct(@PathVariable Integer id) {
+		log.info("Entered into Fetch One Product Method");
 		ResponseEntity<?> response = null;
 		try {
 			Product product = productService.getOneProduct(id);
+			log.debug("Data found with id {}", id);
 			response = new ResponseEntity<Product>(product, HttpStatus.OK);
 
 		} catch (ProductNotFoundException e) {
 			e.printStackTrace();
-			response = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			log.error("error is {} ", e.getMessage());
+			throw e;
 		}
-
+		log.info("About to leave the Fetch One Product Method");
 		return response;
 	}
 
@@ -70,16 +78,19 @@ public class ProductController {
 	@DeleteMapping("/remove/{id}")
 	@ApiIgnore
 	public ResponseEntity<String> deleteProduct(@PathVariable Integer id) {
+		log.info("Entered into Delete Product Method");
 		ResponseEntity<String> response = null;
 		try {
 			productService.deleteProduct(id);
+			log.debug(" Product deleted with id {}", id);
 			response = new ResponseEntity<String>(id + " - Removed", HttpStatus.OK);
 
 		} catch (ProductNotFoundException e) {
 			e.printStackTrace();
-			response = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			log.error("error is {} ", e.getMessage());
+			throw e;
 		}
-
+		log.info("About to leave the Delete Product Method");
 		return response;
 	}
 
@@ -87,15 +98,19 @@ public class ProductController {
 	@PutMapping("/modify")
 	@ApiOperation("Update Product")
 	public ResponseEntity<String> updateProduct(@RequestBody Product product) {
+		log.info("Entered into Update Product Method");
 		ResponseEntity<String> response = null;
 		try {
 			productService.updateProduct(product);
+			log.debug(" Product Updated with id {}", product.getId());
 			response = new ResponseEntity<String>("Updated !!!", HttpStatus.OK);
 
 		} catch (ProductNotFoundException e) {
 			e.printStackTrace();
-			response = new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+			log.error("error is {} ", e.getMessage());
+			throw e;
 		}
+		log.info("About to leave the Update Product Method");
 		return response;
 	}
 
@@ -103,15 +118,20 @@ public class ProductController {
 	@PatchMapping("/update/{id}/{code}")
 	@ApiOperation("Update Product Code by using Id")
 	public ResponseEntity<String> updateProductCode(@PathVariable Integer id, @PathVariable String code) {
+		log.info("Entered into Update Product Code Method");
 		ResponseEntity<String> response = null;
 		try {
 			productService.updateCodeById(code, id);
+			log.debug("Product Code Updated with id {}", id);
 			response = new ResponseEntity<String>("Code is Updated !!!", HttpStatus.OK);
 
 		} catch (ProductNotFoundException e) {
 			e.printStackTrace();
-			response = new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+			log.error("error is {} ", e.getMessage());
+			throw e;
 		}
+
+		log.info("About to leave the Update Product Code Method");
 		return response;
 	}
 

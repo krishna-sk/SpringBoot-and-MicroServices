@@ -12,3 +12,17 @@ spring:
 #      hibernate:
 #        format_sql: true
 #    show-sql: true
+logging:
+  file:
+    name: C:/Users/krish/mylogs/abcd.log
+    #default size is 10 MB
+    max-size: 20MB
+    #default history is 7 days
+    max-history: 15
+    #default level is info
+  level: 
+    '[com.krishna]': DEBUG
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss:SSS} %-5level--- %C [%M] - %msg%n"
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss:SSS}){magenta} %clr(%-5level)--- %clr(%C){yellow} %clr([%M]){cyan} - %msg%n"
+    
