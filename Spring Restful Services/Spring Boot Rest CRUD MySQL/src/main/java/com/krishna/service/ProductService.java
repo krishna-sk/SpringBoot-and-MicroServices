@@ -16,4 +16,6 @@ public interface ProductService {
 
 	void updateProduct(Product p);
 
+	boolean updateCodeById(String code, Integer id);
+
 }

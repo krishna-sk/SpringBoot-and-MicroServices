@@ -2,6 +2,8 @@ package com.krishna.service;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +48,15 @@ public class ProductServiceImpl implements ProductService {
 		} else {
 			throw new ProductNotFoundException(p.getId() + " - not exist");
 		}
+	}
+
+	@Transactional
+	public boolean updateCodeById(String code, Integer id) {
+		/*
+		 * Integer count = productRepository.updateCodeById(code, id); 
+		 * return count >0;
+		 */
+		return productRepository.updateCodeById(code, id) > 0;
 	}
 
 }

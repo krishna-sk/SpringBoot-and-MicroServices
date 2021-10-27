@@ -383,6 +383,7 @@ Output: HELLO :: C ABC grade
 
 **@Transactional :** for pre-defined repository methods, need not to define externally. For custom non-select operations you must provide this.
 
+- @Transactional: Will beginTx and commit() if method/Query is success. rollback() if any exception.
 - 1 Endpoint - Define one method for one Operation in RestController
 - 1 Rest API - Define full class (RestController) with multiple Endpoints.
 - For Consumer We provide Endpoint details -- URL, HttpMethod, Input/Output Header details..etc
@@ -392,3 +393,61 @@ Output: HELLO :: C ABC grade
 - 201 CREATED: Status indicates Request process is successful + a new Resource is created at Producer/Server side.[ Resource : file/DB/... ]
 - Symbol ? (wildcard char) indicates data-type for Generic is decided at runtime.
 - For ReturnType non-String(List/Product..etc) then @RestController provides @ResponseBody, that converts data into JSON format.
+
+###### 26-October-2021
+
+**Update Operations:-**
+
+- Read JSON/XML data for Product Object.
+- This time Object must have ID(PK) also.
+- If given id is null or not exist then we throw Exception Else update operation is executed.
+- Custom-Non SELECT Operation, then must provide @Modifying + @Query("") at Repository
+- Only @Query behaves like SELECT operation @Query() + @Modifying indicates to Data JPA "this is NON-SELECT".
+- @Transactional: Will beginTx and commit() if method/Query is success. rollback() if any exception.
+
+#### Swagger UI
+
+- SpringFox Company has provided Dyanmic Test UI for all Rest Controllers.
+- By using this open Source UI, we can generate Test screen for all our operations which reduces entering URL manually, select Method Types, input checking..etc
+- Easy to test
+- We can view all operations in code
+- Easy for API Overview.
+
+###### Step 1 : Add below Dependencies
+
+```xml
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.9.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.9.2</version>
+		</dependency>
+
+```
+
+###### Step 2 : Write Configuration Code
+
+a .Create Empty Docket\
+ new Docket(DocumentationType.SWAGGER_2)
+
+b. Select all Rest Controllers from project using one common package name\
+.select()\
+.apis(RequestHandlerSelectors.basePackage("in.nareshit.raghu.rest"))
+
+c. Provide condition having one common path (ex: /rest/\_\_\_)\
+.paths(PathSelectors.regex("/rest.\*"))
+
+d. Create Full Docket.\
+.build();
+
+e. Run application and enter URL:
+http://localhost:9090/swagger-ui.html
+
+AT class Level : @Api(description = "TEST PRODUCT OPERATION")\
+AT method level : @ApiOperation("FETCH ALL ROWS AS LIST")\
+To avoid display : @ApiIgnore\
