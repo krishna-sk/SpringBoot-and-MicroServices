@@ -451,3 +451,45 @@ http://localhost:9090/swagger-ui.html
 AT class Level : @Api(description = "TEST PRODUCT OPERATION")\
 AT method level : @ApiOperation("FETCH ALL ROWS AS LIST")\
 To avoid display : @ApiIgnore\
+
+###### 27-October-2021
+
+#### Error and Exception Handling Flow
+
+- Spring boot by default given one class 'BasicErrorController' and method error() for error and exception handling.
+
+- But this time we want to create our own customized Exception class then define one class with any name and add @RestControllerAdvice\
+  @RestControllerAdvice = In @RestController any Exception (AfterThrowing Advice)
+
+- To indicate every exception type define one method, using annotation @ExceptionHandler(T.class) [T=ExceptionClass]
+
+- @RestControllerAdvice internally follows @ResponseBody, if returntype is complexType(class/array) then it is converted into JSON Format.
+
+#### logging
+
+- Lombok annotation: @Slf4j generate Logger object at class private static final Logger log = LoggerFactory.getLogger(ProductRestController.class);
+
+- Spring boot default Priority method is set to INFO.\
+  FATAL\
+  ERROR\
+  WARN\
+  INFO\
+  DEBUG\
+  TRACE
+
+- SLF4J simplifies Logging (Log4J) Concept, need not to define log4j.properties, common Logger object created. root logger is set to INFO.
+```yml
+logging:
+  file:
+    name: C:/Users/krish/mylogs/abcd.log
+    #default size is 10 MB
+    max-size: 20MB
+    #default history is 7 days
+    max-history: 15
+    #default level is info
+  level: 
+    '[com.krishna]': DEBUG
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss:SSS} %-5level--- %C [%M] - %msg%n"
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss:SSS}){magenta} %clr(%-5level)--- %clr(%C){yellow} %clr([%M]){cyan} - %msg%n"
+```
