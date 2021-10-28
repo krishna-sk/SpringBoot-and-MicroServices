@@ -493,3 +493,45 @@ logging:
     file: "%d{yyyy-MM-dd HH:mm:ss:SSS} %-5level--- %C [%M] - %msg%n"
     console: "%clr(%d{yyyy-MM-dd HH:mm:ss:SSS}){magenta} %clr(%-5level)--- %clr(%C){yellow} %clr([%M]){cyan} - %msg%n"
 ```
+
+###### 28-October-2021
+
+#### Spring Boot UnitTesting
+
+- By default Spring Boot adds : spring-boot-starter-test dependency JUnit 5.x [ junit-jupiter ] + Mockito 3.x [mockito-core]
+- Even Integration jar: mockito-junit-jupiter
+- JUnit assert Results. ie compare actual result with expected values.
+- Mockito creates required objects to run unit testing.[dummy container, request, DB connection, service object..etc]
+
+- Incase of Unit testing we do not run main() class. We will run Unit testcase. So, full container setup must be done using Mockito.
+
+1. Create Server setup with Empty container
+
+```java
+   @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
+```
+
+2. Load all parent project objects and your classes obejcts into container
+
+```java
+   @AutoConfigureMockMvc
+```
+
+3. Load Properties file if you have your own configuration.
+
+```java
+   @TestPropertySource("classpath:application-test.properties")
+```
+
+4. Refer this to Spring container and read into variable.
+
+```java
+   @Autowired
+   private MockMvc mockMvc;
+```
+
+5. For Every method testing\
+   I. create one Request using Mocking\
+   II. Execute Request and get Result\
+   III. Read Response From Result\
+   IV. Assert Result using JUnit.
