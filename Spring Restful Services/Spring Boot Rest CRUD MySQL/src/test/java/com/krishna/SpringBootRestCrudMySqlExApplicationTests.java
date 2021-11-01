@@ -49,19 +49,18 @@ class SpringBootRestCrudMySqlExApplicationTests {
 		}
 
 	}
-	
+
 	@Test
 	@DisplayName("FETCH ALL PRODUCTS")
 	@Order(2)
 	public void testFetchAllProducts() throws Exception {
-		// I.  create one Request using Mocking
-		MockHttpServletRequestBuilder request = 
-				MockMvcRequestBuilders.get("/rest/product/all");
+		// I. create one Request using Mocking
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("/rest/product/all");
 
 		// II. Execute Request and get Result
 		MvcResult result = mockMvc.perform(request).andReturn();
 
-		//III. Read Response From Result
+		// III. Read Response From Result
 		MockHttpServletResponse response = result.getResponse();
 
 		// IV. Assert Result using JUnit.
@@ -74,41 +73,102 @@ class SpringBootRestCrudMySqlExApplicationTests {
 	@DisplayName("FETCH ONE PRODUCT")
 	@Order(3)
 	public void testfetchOneProductExist() throws Exception {
-		//  I. create one Request using Mocking
-		MockHttpServletRequestBuilder request =
-				MockMvcRequestBuilders.get("/rest/product/one/{id}",1);
+		// I. create one Request using Mocking
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("/rest/product/one/{id}", 1);
 
-		//  II. Execute Request and get Result
+		// II. Execute Request and get Result
 		MvcResult result = mockMvc.perform(request).andReturn();
 
 		// III. Read Response From Result
 		MockHttpServletResponse response = result.getResponse();
 
-		//  IV. Assert Result using JUnit.
+		// IV. Assert Result using JUnit.
 		assertEquals(HttpStatus.OK.value(), response.getStatus());
 		assertNotNull(response.getContentAsString());
 		assertEquals(MediaType.APPLICATION_JSON_VALUE, response.getContentType());
 
-	} 
+	}
 
 	@Test
 	@DisplayName("FETCH ONE PRODUCT NOT EXIST")
 	@Order(4)
 	public void testfetchOneProductNotFound() throws Exception {
-		//  I. create one Request using Mocking
-		MockHttpServletRequestBuilder request =
-				MockMvcRequestBuilders.get("/rest/product/one/{id}",999);
+		// I. create one Request using Mocking
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("/rest/product/one/{id}", 999);
 
-		//  II. Execute Request and get Result
+		// II. Execute Request and get Result
 		MvcResult result = mockMvc.perform(request).andReturn();
 
 		// III. Read Response From Result
 		MockHttpServletResponse response = result.getResponse();
 
-		//  IV. Assert Result using JUnit.
+		// IV. Assert Result using JUnit.
 		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), response.getStatus());
 		assertEquals(MediaType.APPLICATION_JSON_VALUE, response.getContentType());
-		if(!response.getContentAsString().contains("not exist")) {
+		if (!response.getContentAsString().contains("not exist")) {
+			fail("MY BE DATA IS PRESENT");
+		}
+	}
+
+	@Test
+	@DisplayName("UPDATE PRODUCT")
+	@Order(5)
+	public void testUpdateProduct() throws Exception {
+		// I. create one Request using Mocking
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.put("/rest/product/modify")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{\"id\":1,\"code\":\"NEW PEN\",\"cost\":420.0}");
+
+		// II. Execute Request and get Result
+		MvcResult result = mockMvc.perform(request).andReturn();
+
+		// III. Read Response From Result
+		MockHttpServletResponse response = result.getResponse();
+
+		// IV. Assert Result using JUnit.
+		assertEquals(HttpStatus.OK.value(), response.getStatus());
+		if (!response.getContentAsString().contains("Updated")) {
+			fail("DATA NOT FOUND FOR UPDATE");
+		}
+	}
+
+	@Test
+	@DisplayName("DELETE PRODUCT")
+	@Order(6)
+	public void testDeleteProduct() throws Exception {
+		// I. create one Request using Mocking
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete("/rest/product/remove/{id}", 1);
+
+		// II. Execute Request and get Result
+		MvcResult result = mockMvc.perform(request).andReturn();
+
+		// III. Read Response From Result
+		MockHttpServletResponse response = result.getResponse();
+
+		// IV. Assert Result using JUnit.
+		assertEquals(HttpStatus.OK.value(), response.getStatus());
+		if (!response.getContentAsString().contains("Removed")) {
+			fail("Not Deleted!");
+		}
+	}
+
+	@Test
+	@DisplayName("DELETE PRODUCT NOT EXIST")
+	@Order(7)
+	public void testDeleteProductNotExist() throws Exception {
+		// I. create one Request using Mocking
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete("/rest/product/remove/{id}", 500);
+
+		// II. Execute Request and get Result
+		MvcResult result = mockMvc.perform(request).andReturn();
+
+		// III. Read Response From Result
+		MockHttpServletResponse response = result.getResponse();
+
+		// IV. Assert Result using JUnit.
+		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), response.getStatus());
+		assertEquals(MediaType.APPLICATION_JSON_VALUE, response.getContentType());
+		if (!response.getContentAsString().contains("not exist")) {
 			fail("MY BE DATA IS PRESENT");
 		}
 	}

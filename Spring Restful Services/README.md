@@ -478,6 +478,7 @@ To avoid display : @ApiIgnore\
   TRACE
 
 - SLF4J simplifies Logging (Log4J) Concept, need not to define log4j.properties, common Logger object created. root logger is set to INFO.
+
 ```yml
 logging:
   file:
@@ -535,3 +536,19 @@ logging:
    II. Execute Request and get Result\
    III. Read Response From Result\
    IV. Assert Result using JUnit.
+
+- Use H2 (Inmemory) Database for testing purpose.
+
+1. Comment MySQL Dependency
+2. Add H2 Database Dependency in pom.xml
+
+```xml
+   <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <scope>runtime</scope>
+   </dependency>
+```
+
+3. No keys required (Driver, URL, UN, PWD and DIALECT)
+4. Default Hibernate.hbm2ddl.auto=CREATE-DROP
