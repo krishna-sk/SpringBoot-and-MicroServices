@@ -116,8 +116,7 @@ class SpringBootRestCrudMySqlExApplicationTests {
 	public void testUpdateProduct() throws Exception {
 		// I. create one Request using Mocking
 		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.put("/rest/product/modify")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content("{\"id\":1,\"code\":\"NEW PEN\",\"cost\":420.0}");
+				.contentType(MediaType.APPLICATION_JSON).content("{\"id\":1,\"code\":\"NEW PEN\",\"cost\":420.0}");
 
 		// II. Execute Request and get Result
 		MvcResult result = mockMvc.perform(request).andReturn();
@@ -133,8 +132,29 @@ class SpringBootRestCrudMySqlExApplicationTests {
 	}
 
 	@Test
-	@DisplayName("DELETE PRODUCT")
+	@DisplayName("PARTIAL UPDATE PRODUCT")
 	@Order(6)
+	public void testUpdateProductById() throws Exception {
+		// I. create one Request using Mocking
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.patch("/rest/product/update/{id}/{code}", 1,
+				"UPDATED PEN");
+
+		// II. Execute Request and get Result
+		MvcResult result = mockMvc.perform(request).andReturn();
+
+		// III. Read Response From Result
+		MockHttpServletResponse response = result.getResponse();
+
+		// IV. Assert Result using JUnit.
+		assertEquals(HttpStatus.OK.value(), response.getStatus());
+		if (!response.getContentAsString().contains("Code is Updated !!!")) {
+			fail("DATA NOT FOUND FOR UPDATE");
+		}
+	}
+
+	@Test
+	@DisplayName("DELETE PRODUCT")
+	@Order(7)
 	public void testDeleteProduct() throws Exception {
 		// I. create one Request using Mocking
 		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete("/rest/product/remove/{id}", 1);
@@ -154,7 +174,7 @@ class SpringBootRestCrudMySqlExApplicationTests {
 
 	@Test
 	@DisplayName("DELETE PRODUCT NOT EXIST")
-	@Order(7)
+	@Order(8)
 	public void testDeleteProductNotExist() throws Exception {
 		// I. create one Request using Mocking
 		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete("/rest/product/remove/{id}", 500);
