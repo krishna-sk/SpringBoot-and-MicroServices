@@ -552,3 +552,77 @@ logging:
 
 3. No keys required (Driver, URL, UN, PWD and DIALECT)
 4. Default Hibernate.hbm2ddl.auto=CREATE-DROP
+
+###### 02 November 2021
+
+#### Connection Pooling :
+
+Pool : Group of Objects (of same classType)\
+ex: Employee Pool = Employee class obejcts (e1,e3,emp...)
+
+- String Constants Pool (SCP)
+  Every String object is a Constant.\
+   Group of String objects is called as SCP.
+
+**Connection Pooling :** Group of Connection Objects which are created while starting/running application.
+
+- To send one SQL to DB/to get Result from DB we need Database Connection.
+- JDBC Sample code for Database Connection
+
+```textile
+  [java.sql]
+  Class.forName(driverClass);
+  Connection con = DriverManager.getConnection(url,un,pwd);
+```
+
+- One Connection object is fine to Perform Database Operations.\
+  [Recomanded for small scale application/single user apps] But, incase of Multi-user application connection pooling is required.
+- Connection pools makes NIO calls(execution of SQLs/Result trasfer) makes
+  faster.
+- Connection pool is created with group of Connection objects, app will do
+  - Read Connection From Pool
+  - Execute task (send/receive)
+  - Return Connection to Pool
+- In Spring Boot Connection pool creation/handling is Auto-Configured. We can customize the details.
+
+- When we add Spring Boot Data JPA Dependency, by default "HikariCP" [Hikari Connection Pool] is added to Project.
+
+```xml
+   <dependency>
+      <groupId>com.zaxxer</groupId>
+      <artifactId>HikariCP</artifactId>
+      <version>4.0.3</version>
+      <scope>compile</scope>
+    </dependency>
+```
+
+- All Default configurations are given inside class : HikariConfig [com.zaxxer.hikari]
+
+- This HikariCP is a open source JAVA API. Not from Spring Boot. It is 3rd party {not from Sun/Oracle, or from Spring Boot}
+
+- It is mainly designed for JDBC connection pool concept.
+
+- One Connection Cycle is defined as single DataSource.getConnection()/Connection.close().
+
+- One Statement Cycle is defined as single Connection.prepareStatement(), Statement.execute(), Statement.close().
+
+- Comapred to other CP(Connection Pool) providers faster in execution process.
+
+- When all connection objects are busy, 1 request is waiting for one connection more then X-time (ex: 30000 MillSec) then it is sent Response as Connection Timeout.
+
+- We can define no.of Max Conections created at Pool (Even H/w Config required)
+
+- if there are no connections in use then keep few connections active,close other (minimum-idle)
+
+- max-lifetime (recomanded as -1 for server start to stop).To keep a connection in pool for a period of time.
+
+- DEFAULT_POOL_SIZE is 10.
+
+```textile
+spring.datasource.hikari.pool-name=My-CP
+spring.datasource.hikari.connection-timeout=30000
+spring.datasource.hikari.minimum-idle=15
+spring.datasource.hikari.idle-timeout=10000
+spring.datasource.hikari.max-lifetime=60000
+spring.datasource.hikari.maximum-pool-size=20
+```
