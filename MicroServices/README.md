@@ -1,5 +1,7 @@
 # Microservices
 
+###### 03-November-2021
+
 ### Monolithic Application
 
 - Project is a collection of Modules. [ Application is a collection of Service]\
@@ -60,3 +62,15 @@
 - LBS will not process request.
 - It will dispatch request to ServiceInstance
 - Every ServiceInstance is identified using InstanceId(HexaDecimal Value)
+
+###### 06-November-2021
+
+**Microservices :** An independent deployable component, that supports communication with other services. one service as one application. \[ 1 module = 1 project \]. A de-coupled architecture is called as Microservices.
+
+**Monolithic vs Microservice**
+
+![](images/monolithic-vs-microservice.png)
+
+**Microservice Architecture**
+
+![](images/microservice-architecture.png)
