@@ -626,3 +626,53 @@ spring.datasource.hikari.idle-timeout=10000
 spring.datasource.hikari.max-lifetime=60000
 spring.datasource.hikari.maximum-pool-size=20
 ```
+
+## Rest Template
+
+###### 05-November-2021
+
+### Consumer using Boot - RestTemplate(C)
+
+- To implement Producer application we can use RestController, Get/POST Mappings ResponseEntity..etc
+
+- Consumer application can also be implemented using Boot. RestTemplate(C) [Http client class]
+- This class : RestTemplate(C) is used to make HTTP calls [GET/POST/PUT..]
+- This RestTemplate needs inputs like : URL, PathVariables, Header Params, Body, ResponseType..etc
+- RestTemplate(C) will never comes with Auto-configuration by Spring boot. We must create this object manually.
+- Consumer also runs in server, to run this application multiple times, for testing, stop it and run again (or use System.exit(0))
+
+**getForEntity(URL, ResponseType, Pathvariables..) : ResponseEntity<T>** : This method is used to make HTTP call (GET) type to producer application and gets Response Back into ResponseEntity<T> Object.
+
+- Recommended ResponseType for any combination is : String.class. It can store text/XML/JSON..etc
+- Even we can use Our Own ResponseTypes ex: Employee.class, Product.class..etc. If Response is JSON/XML then it is converted into Object and given to consumer.
+
+**postForEntity(url,reqestEntity,ResponseType,PathVariables...):ResponseEntity<T>** : This method is used to make POST method call.
+
+- it supports passing RequestBody + headers using reqestEntity concept.
+- Main code is:
+
+```java
+HttpHeaders headers = new HttpHeaders();
+headers.setContentType(MediaType.APPLICATION_JSON);
+String body = "{\"id\":101,\"name\":\"SAM\",\"sal\":250.0}";
+HttpEntity<String> requestEntity = new HttpEntity<String>(body, headers);
+```
+
+- put() and delete() are given by RestTemplate(C) [works fine] but returns void,no ResponseType is given. So, recomanded new method: exchange()
+
+- exchange method is given by RestTemplate(C) used to make any type of HTTP call (GET/POST/PUT/DELETE..etc)
+
+```java
+exchange(
+     String url,
+     HttpMethod method,
+     HttpEntity<?> requestEntity,
+     Class<T> responseType,
+     Object... uriVariables
+  ) : ResponseEntity<T>
+```
+
+- Here HttpMethod is a enum.
+- RequestEntity can be null some time (for GET/DELETE methods)
+- ResponseEntity is must ex: String, Employee,..etc
+- uriVariables/PathVariables are optional to pass(based on producer URL)
