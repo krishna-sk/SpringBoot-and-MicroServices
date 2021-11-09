@@ -91,7 +91,7 @@ ex: AWS, Google Cloud, MS-AZURE
 
 | Concepts                        | Tools/ Softwares                |
 | ------------------------------- | ------------------------------- |
-| Service(Microservice)                    | Spring REST                     |
+| Service(Microservice)           | Spring REST                     |
 | Register & Discovery            | Eureka Server                   |
 | Config Server                   | Cloud Config(GIT)               |
 | API Gateway                     | Zuul(old)/Cloud Gateway         |
@@ -223,3 +223,64 @@ ex: AWS, Google Cloud, MS-AZURE
 - Spring Cloud is a collection of Microservice Components as a pre-defined project, for every paroject this one must be added.
 - But already Spring Boot is a Parent Project. So, this is added to our project using BOM (Bill Of Materials) using a tag "\<dependencyManagement>"
 - If we are developing Spring Cloud Applications then internally it uses Spring boot concepts also.
+
+###### 08-November-2021
+
+#### Register and Discovery Server :-[Netflix Eureka Server]
+
+- This server contains Microservice Details (knonw as ServiceInstance)\
+   Details/ServiceInstance means\
+   a. serviceId (application name)\
+   b. InstanceId (Instance Number)\
+   c. HOST/IP\
+   d. PORT\
+   e. Load Factor
+- Eureka is a Register, It will never makes any HTTP call to Microservice
+- Every Microservice Must be registered with Eureka, then only they can be called/executed/accessed by other Microservice or API Gateway.
+- At Microservice application we need to add "eureka.client.register-with-eureka=true". But, Spring cloud parent has given same.
+- Even for Eureka Server , Spring cloud is parent and given " eureka.client.register-with-eureka=true ". It must be set to FALSE, else dummy/UNKNOW object
+  is creted for Eureka itself, which has no use(waste of memory) so we add "eureka.client.register-with-eureka=false" in properties file
+
+- If one Microservice wants to communicate with another Microservice,we need Register (a place where Microservice details is stored) From Eureka, that can be fetched by adding "eureka.client.fetch-registry=true".Default value is true given by Spring cloud. So, write one time false in Eureka server.
+
+**Note:**
+
+- Eureka is a Register
+- Eureka Stores Microservice details/serviceInstance
+- Eureka can share one Microservice details with another Microservice
+- Eureka never makes HTTP call to any App/Microservice
+
+- PUBLISH : Register Microservice with eureka done using
+- Add Eureka Discovey Client in POM.xml
+- @EnableEurekaClient at Microservice main class
+- Eureka location at Microservice properties
+
+```text
+eureka.client.service-url.defaultZone=http://localhost:8761/eureka
+```
+
+- Register with Eureka as true
+
+```text
+   eureka.client.register-with-eureka=true
+```
+
+#### Microservice --- Intra Communication
+
+- One Microservice can communicate with another Microservice to exchange data(or to execute operations)that is called as Intra-Communication.
+
+- Must use one Consumer for Microservice Intra-Communication
+
+  - DiscoveryClient (legacy)
+  - LoadBalancerClient **
+  - FeignClient *****
+
+- To make communication we need URL of Microservice
+- Microservice **URI** can be fetch be from Eureka and create **URL**
+- Then use RestTemplate and make CALL.
+
+- DiscoveryClient is used to fetch Microservice Details as List<ServiceInstance> by taking serviceId as input.
+- From ServiceInstance read URI at runtime(IP:PORT)
+- add Path to URI that gives URL
+- Use RestTemplate to make HTTP call and get Response.
+- This DicoveryClient and RestTemplate code write inside one Consumer class (ie CartRestConsumer)
