@@ -333,4 +333,51 @@ eureka.client.service-url.defaultZone=http://localhost:8761/eureka
   **eureka.instance.instance-id=${spring.application.name}:${random.value}**
 - InstanceId is not required in case of single instance.
 - ${random.value} -- generates one hexa decimal value using a class "RandomValuePropertySource"
+
 - We must add Cloud LoadBalancer Dependency to use "LoadBalancerClient"
+- This client is used to fetch one ServiceInstance per request, from eureka server.
+- Input is 'ServiceId'(spring.application.name) and Output is ServiceInstance.
+- InstanceId need to provided to create multiple instances.\
+   eureka.instance.instance-id=\***\*\_\*\***(String)
+- It is going to choose an instance that has less load factor\
+  [ min(List<LF>) --> InstanceId ---> ServiceInstance ]
+
+- If all/multiple instances are having same LoadFactor,\
+  (ex: IID#110 -> LF 0.3, IID#234 -> LF 0.3 , IID#875 -> LF 0.3), Choose any one Instance in Random [ ex: new Random().nextInt(3) ]
+- LoadBalancerClient(I) and Impl class is : BlockingLoadBalancerClient(C) ( old one : RibbonLoadBalancerClient(C) )
+  Ribbon was netflix component (3rd party) now moved to Cloud LoadBalancer spring cloud component.
+- ServiceInstance(I) impl class is : EurekaServiceInstance(C)
+- ${random.value} : It internall executes class: RandomValuePropertySource(C), method: getRandomValue();
+
+- Note: It is generting one hexa-decimal (base-16) value that can be used as id(PK/IDs)\
+   ${random.value} sample output: c06725b5295b64b8446dcfb890ffbd1e
+- Id generated using = System IP + Date And Time + Random Value These are unique in nature.
+
+- InstanceId is required if you are running your application multiple times (multiple instances). IF there is only one instance then it is not required.
+
+### Open Feign (Feign Client)
+
+- It is called as abstract client (or) Declarative Client.
+- Here, we need to write interface with abstract methods. Then one class is generated using LoadBalancerClient internally , ie called as Proxy [Dynamic Proxy class].
+
+- Dynamic Proxy class: A dynamic proxy class is a class that implements a list of interfaces specified at runtime (no .class is present/ code generated using Reflection API),class name may look like sun.Proxy$25
+
+- We must add OpenFeign dependency at Consumer code side pom.xml
+
+```xml
+<dependency>
+	<groupId>org.springframework.cloud</groupId>
+	<artifactId>spring-cloud-starter-openfeign</artifactId>
+</dependency>
+```
+
+- @EnableFeignClients must be added at Main class to activate proxy class genearation
+- For one Consumer, define one interface and apply @FeignClient("serviceId")
+- Provide abstract method inside FeignClient interface that matches to Producer RestController (only method and interfaces names can be different).\
+  Matching Required: ServiceId, Path, HttpMethod, Parameter and ReturnType.
+
+#### Coding steps
+
+- Define one interface with any name.
+- Apply @FeignClient("serviceId") over interface.
+- Define one abstract method with any name. But other details must be matched with Producer(ie PATH, Http Method, ReturnType, Parameter)
