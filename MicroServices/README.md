@@ -205,7 +205,7 @@ ex: AWS, Google Cloud, MS-AZURE
 
   - App Started properly or not?
   - Beans created or not?
-  - Env details.
+  - Environment details.
   - Mappings
   - Threads/Heap details
   - Cache details
@@ -268,7 +268,7 @@ eureka.client.service-url.defaultZone=http://localhost:8761/eureka
 #### Microservice --- Intra Communication
 
 - One Microservice can communicate with another Microservice to exchange data(or to execute operations)that is called as Intra-Communication.
-- Creating a Communication link between multiple MS# to exchange Data is called as "Intra Communication"
+- Creating a Communication link between multiple Microservice to exchange Data is called as "Intra Communication"
 
 - Must use one Consumer for Microservice Intra-Communication
 
@@ -286,7 +286,7 @@ eureka.client.service-url.defaultZone=http://localhost:8761/eureka
 - Use RestTemplate to make HTTP call and get Response.
 - This DicoveryClient and RestTemplate code write inside one Consumer class (ie CartRestConsumer)
 
-- We are using Eureka Server (Register and Discovery Server) to store our MS# Data (Publish),to fetch other MS# data(Find) using DiscoveryClient(I).
+- We are using Eureka Server (Register and Discovery Server) to store our Microservice Data (Publish),to fetch other Microservice data(Find) using DiscoveryClient(I).
   - (ServiceInstance = ServiceId + InstanceId + HOST + PORT + LF)
 
 #### CODING STEPS USING DISCOVERY CLIENT
@@ -329,7 +329,7 @@ eureka.client.service-url.defaultZone=http://localhost:8761/eureka
 
 - We use this time "LoadBalancerClient" that gets always one instance(ServiceInstace) which has less load factor.
 
-- If we are running our application (MS#) multiple times to create multiple ServiceInstances then must provide InstanceId, using
+- If we are running our application (Microservice) multiple times to create multiple ServiceInstances then must provide InstanceId, using
   **eureka.instance.instance-id=${spring.application.name}:${random.value}**
 - InstanceId is not required in case of single instance.
 - ${random.value} -- generates one hexa decimal value using a class "RandomValuePropertySource"
@@ -381,3 +381,7 @@ eureka.client.service-url.defaultZone=http://localhost:8761/eureka
 - Define one interface with any name.
 - Apply @FeignClient("serviceId") over interface.
 - Define one abstract method with any name. But other details must be matched with Producer(ie PATH, Http Method, ReturnType, Parameter)
+- FeignClient generates consumer code based on inputs: PATH, HttpMethod, ReturnType, Params(PathVariable/RequestBody)
+- Method name is nerver considered for code generation (any method name is fine!!)
+- Incase of ReturnType/Parameter is a complex type(classType) then same type must be copied from producer Microservice to Consumer Microservice
+
