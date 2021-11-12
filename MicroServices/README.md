@@ -385,3 +385,18 @@ eureka.client.service-url.defaultZone=http://localhost:8761/eureka
 - Method name is nerver considered for code generation (any method name is fine!!)
 - Incase of ReturnType/Parameter is a complex type(classType) then same type must be copied from producer Microservice to Consumer Microservice
 
+  ### Spring Cloud - Config Server
+
+- In a application there can be multiple Microservices
+- In all these Microservices there can be some common KEY=VALs
+- These common keys=vals we can define outside of all Microservice apps using Git Vendor (ex: github) and share to every Microservice using one common server "Config Server"
+- You just add one Dependency Config Client at Microservice that makes call to Config Server.
+- All KEY=VAL finally stored inside memory ie called as "Environment"
+- Config server recomanded port number is : 8888 (we can use any)
+- \*\*\* When we run Microservice first Config Client only executed gets key=val, merge with Environment and start Microservice Application finally register with eureka.\
+  [org.springframework.core.env] Environment(I) Impl class StandardEnvironment(C)
+- Types of Configurations:-
+  - External Configuratin : All key-val are kept in Cloud/Internet location example using Github
+  - Native Configuration : Storing all key-val inside local system.\
+    (Ex: D:/myapp/application.properties , inside project)
+- Native Config used only in Dev/Testing Purpose not in Production.
