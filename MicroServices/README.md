@@ -400,3 +400,44 @@ eureka.client.service-url.defaultZone=http://localhost:8761/eureka
   - Native Configuration : Storing all key-val inside local system.\
     (Ex: D:/myapp/application.properties , inside project)
 - Native Config used only in Dev/Testing Purpose not in Production.
+
+### Distributed Tracing
+
+Problem Statement:- Finding Execution Path and Order of Execution of Microservices is complex as they are running at different devices.
+
+- For one request multiple microservices may get executed in connected order (chain of MS in execution)
+
+- In case of Complex design finding Execution Path (TRACE PATH) is not easy as they are running in different locations and multiple instances (isolated components)
+
+- Distributed Tracing Pattern:-
+
+  - Find Execution path of multiple Microservices involved in Request
+  - Time taken for a Microservice
+  - Helps to find Log line order.
+
+- Spring Cloud : Sleuth and Zipkin
+
+- Sleuth and Zipkin are given by Spring Cloud used for Distributed Tracing.
+- Sleuth : Creates TraceId and SpanId to find execution path details and store in temp memory.
+- Zipkin Client : It collects data from Sleuth (Sampling) and send to UI (Zipkin Server)
+
+- Zipkin Server : A Central Server that will display all details of execution paths
+  - Download the Zipkin Client https://zipkin.io/pages/quickstart.html
+  - Run the zipkin jar to start the server by using the command "java -jar {zipkin-server-jar-name}.jar"
+  - open the zipkin server at http://localhost:9411/
+  - send a http request to the microservice and
+
+##### coding steps:
+
+- adding Sleuth and Zipkin Client
+- Creating Smapler object
+- Making HTTP call to next Microservice
+- Run Zipkin server
+- Start all Microservice apps
+- execute first Microservice REST Endpoint
+
+**traceId:** Unique number generated to find full path details for a request (including all Microservice executed in order)
+
+**spandId :** To find only one Microservice execution details.
+
+**parentId:** Current Microservice ParentID is taken from previous Microservice spandId
