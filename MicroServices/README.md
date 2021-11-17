@@ -521,3 +521,32 @@ info.client.reg=active
 info.client.mode=CLOUD
 info.client.deploy=true
 ```
+
+#### Actuator : Admin Server/Client
+
+- Actuator has given multiple services to observe operations, but all are manually entered URLs.
+
+- This time Vendor codecentric, has given Client-Server API that automates Request URLs and makes UI for output checking
+
+- At Microservice application we must provide URL of Admin Server "spring.boot.admin.client.url=http://localhost:9999"
+
+**Step 1**\
+Create one Common Project For Admin Server\
+At main class : @EnableAdminServer\
+application.properties
+
+```textile
+server.port=9999
+```
+
+**Step 2**\
+Add Admin Client at every Microservice application
+
+**Step 3**\
+add url of admin server in actuator client application/Microservice 
+application.properties
+
+```textile
+spring.boot.admin.client.url=http://localhost:9999
+```
+
