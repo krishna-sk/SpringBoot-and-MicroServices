@@ -441,3 +441,83 @@ Problem Statement:- Finding Execution Path and Order of Execution of Microservic
 **spandId :** To find only one Microservice execution details.
 
 **parentId:** Current Microservice ParentID is taken from previous Microservice spandId
+
+### Actuator
+
+- For any type of Spring Boot applications, we may need some additional services like Beans, info, cache, scheduling, metrics, health,..etc
+- Every Service is a pre-defined class called as Endpoint.
+- Collection of Endpoints are given as one API known asSpring Boot Actuator.
+- Application = Functionality + Additional Services
+
+#### REST v/s Endpoint
+
+REST : Set of Annotations and Classes given to implement logic for your application
+
+Endpoint : Set of pre-defined classes used to observe what is happening at application. Services ready to use in Production Environment
+
+**Actuator :-** Production Ready Endpoints
+
+- Endpoint is a pre-defined (class) service used at production environment
+- Few ready made services generic for all types of applications.
+- Spring Boot Actuator dependency we need to add in Application.
+- Actuator gives default 1 service/endpoint here.
+- Default base path is /actuator http://localhost:8080/actuator, which can be modified
+  "management.endpoints.web.base-path=/myapp",now URL is http://localhost:8080/myapp
+- To view all endpoints/services, add in properties "management.endpoints.web.exposure.include=\*"
+- Here these are selected and exposed using 'EndpointLinksResolver'.
+- We can use this in any type of Spring Boot application (Web, REST, Microservice..etc)
+- By default Actuator (Spring boot 2.5.x) is providing only 1 endpoint (health), base path '/actuator'
+- Spring boot 2.4.x is providing 2 endpoints default health and info.
+- We can activate all or specific endpoints using "management.endpoints.web.exposure.include=\*"
+  (or) "management.endpoints.web.exposure.include=beans,info,env"
+
+**beans :** All objects exist at Spring container can be view here\
+URL: http://localhost:8080/actuator/beans
+
+Q) Activate All Endpoints and remove beans from it.\
+A) management.endpoints.web.exposure.include=\*
+
+Class loaded but not mapped\
+management.endpoints.web.exposure.exclude=beans
+
+Class itself not loaded\
+management.endpoint.beans.enabled=false
+
+**env :** all KEY=VAL loaded into Spring container Environment memory, can be view here\
+URL : http://localhost:8080/actuator/env\
+System properties + VM Args + application.properties + ..etc
+
+**schedulers :** To view all schedulings configured , can be view here\
+URL: http://localhost:8080/actuator/scheduledtasks
+
+**mappings :** What Path+HttpMethod is mapped with Which class can be found here\
+URL: http://localhost:8080/actuator/mappings
+
+**configprops :** KEY=VAL which are loaded using @ConfigurationProperties\
+URL: http://localhost:8080/actuator/configprops
+
+**heapdump :** Backup file for current Heap details\
+ URL: http://localhost:8080/actuator/heapdump
+
+Visual VM:
+
+- Download: https://visualvm.github.io/download.html
+- Extract >> Open ..\visualvm_211\bin\visualvm.exe
+- Load heapdump file
+- Doc:- https://docs.oracle.com/javase/8/docs/technotes/guides/visualvm/intro.html
+
+**info :** to provide meta-data of application\
+URL: http://localhost:8080/actuator/info
+
+###### application.propeties
+
+```textile
+info.app.title=ONE
+info.app.vendor=NIT
+info.app.version=3.2GA
+info.app.ver.major=3
+info.app.ver.minor=2
+info.client.reg=active
+info.client.mode=CLOUD
+info.client.deploy=true
+```
