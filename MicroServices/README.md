@@ -226,7 +226,7 @@ ex: AWS, Google Cloud, MS-AZURE
 
 ###### 08-November-2021
 
-#### Register and Discovery Server :-[Netflix Eureka Server]
+### Register and Discovery Server :-[Netflix Eureka Server]
 
 - This server contains Microservice Details (knonw as ServiceInstance)\
    Details/ServiceInstance means\
@@ -265,7 +265,7 @@ eureka.client.service-url.defaultZone=http://localhost:8761/eureka
    eureka.client.register-with-eureka=true
 ```
 
-#### Microservice --- Intra Communication
+### Microservice --- Intra Communication
 
 - One Microservice can communicate with another Microservice to exchange data(or to execute operations)that is called as Intra-Communication.
 - Creating a Communication link between multiple Microservice to exchange Data is called as "Intra Communication"
@@ -449,7 +449,7 @@ Problem Statement:- Finding Execution Path and Order of Execution of Microservic
 - Collection of Endpoints are given as one API known asSpring Boot Actuator.
 - Application = Functionality + Additional Services
 
-#### REST v/s Endpoint
+### REST v/s Endpoint
 
 REST : Set of Annotations and Classes given to implement logic for your application
 
@@ -522,7 +522,7 @@ info.client.mode=CLOUD
 info.client.deploy=true
 ```
 
-#### Actuator : Admin Server/Client
+### Actuator : Admin Server/Client
 
 - Actuator has given multiple services to observe operations, but all are manually entered URLs.
 
@@ -543,10 +543,59 @@ server.port=9999
 Add Admin Client at every Microservice application
 
 **Step 3**\
-add url of admin server in actuator client application/Microservice 
+add url of admin server in actuator client application/Microservice
 application.properties
 
 ```textile
 spring.boot.admin.client.url=http://localhost:9999
 ```
 
+### Message Queues (MQs)
+
+**Message Queues :** Message Queues are used to send data from one System (Producer) to another System (Consumer) as Continioues Data Flow.
+
+**Example :**
+
+- Swiggy Deliver Status
+- Ola, Uber Cabs
+- Live Train Status
+- Stock Market data
+- Search Engine data with Ads
+- Live Circket Score
+
+APIs used for Message Queues
+
+- Basic MQs ( JMS API )
+- Advanced MQS ( Kafka API )
+
+##### Message Broker :
+
+- It is a Mediator server that reads Messages from Producer,Stores in a Memory(Destination) and send to consumer.Producer and Consumer both are connected to MOMs Destination only.[MOM - Message Oriented Middleware]
+
+**Communication are two types :** Peer-To-Peer Communication, Publish and Subscribe Communication
+
+**Peer-To-Peer Communication :** If one message is given to one consumer then it is called as P2P(Peer-To-Peer Communication).
+
+**Publish and Subscribe Communication :** If one message is given to multiple Consumers (Cloned Copied) that is called as Pub/Sub.
+
+**Destination :** It is a memory that exist inside MOM S/w which stores messages given by Producer s/w.
+
+**Destinations are two types :** Queue ,Topic
+
+**Queue :** It is used incase of P2P(Peer-To-Peer Communication) communication.
+
+**Topic :** It is used for Pub/Sub Communication
+
+#### Apache ActiveMQ 5.x
+
+- Download at https://activemq.apache.org/components/classic/download/
+- Click On : Windows apache-activemq-5.16.3-bin.zip
+- Extract Here > Open folder
+- ..\apache-activemq-5.16.3\bin\win64
+- click on activemq bat file
+- Starts at : http://127.0.0.1:8161/admin
+- Un/pwd : admin/admin
+- \*\* To view/modify details
+- ..\apache-activemq-5.16.3\conf\users.properties
+- Click on Queues/Topics here.
+- ctrl+C to stop ActiveMQ
