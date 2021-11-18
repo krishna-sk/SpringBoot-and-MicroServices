@@ -1,5 +1,19 @@
 # Microservices
 
+#### Table of Contents
+
+- [Monolithic Application](#monolithic-application)
+- [Microservice](#microservice)
+- [Spring Cloud](#spring-cloud)
+- [Register and Discovery Server](#register-and-discovery-server)
+- [Microservice - Intra Communication](#microservice---intra-communication)
+- [Load Balancer Client](#loadbalancerclient)
+- [Spring Cloud - Config Server](#spring-cloud---config-server)
+- [Distributed Tracing](#distributed-tracing)
+- [Actuator and Admin Server](#actuator-and-admin-server)
+- [Actuator - Admin Server/Client](#actuator---admin-serverclient)
+- [Message Queues](#message-queues)
+
 ###### 03-November-2021
 
 ### Monolithic Application
@@ -64,6 +78,8 @@
 - Every ServiceInstance is identified using InstanceId(HexaDecimal Value)
 
 ###### 06-November-2021
+
+### Microservice
 
 **Microservices :** An independent deployable component, that supports communication with other services. one service as one application. \[ 1 module = 1 project \]. A de-coupled architecture is called as Microservices.
 
@@ -226,7 +242,9 @@ ex: AWS, Google Cloud, MS-AZURE
 
 ###### 08-November-2021
 
-### Register and Discovery Server :-[Netflix Eureka Server]
+### [Register and Discovery Server](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/MicroServices/Eureka%20Register%20%26%20Discovery%20Server)
+
+**Register and Discovery Server :-[Netflix Eureka Server]**
 
 - This server contains Microservice Details (knonw as ServiceInstance)\
    Details/ServiceInstance means\
@@ -265,7 +283,9 @@ eureka.client.service-url.defaultZone=http://localhost:8761/eureka
    eureka.client.register-with-eureka=true
 ```
 
-### Microservice --- Intra Communication
+### [Microservice - Intra Communication](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/MicroServices/Microservice%20Intra%20Communication)
+
+**Microservice --- Intra Communication**
 
 - One Microservice can communicate with another Microservice to exchange data(or to execute operations)that is called as Intra-Communication.
 - Creating a Communication link between multiple Microservice to exchange Data is called as "Intra Communication"
@@ -325,7 +345,9 @@ eureka.client.service-url.defaultZone=http://localhost:8761/eureka
 
 - DiscoveryClient returns all ServiceInstances from Eurekaas List<SI>, we should choose any one instance manually.(It is not a better approch)
 
-### LoadBalancerClient / LBC (Interface)
+### LoadBalancerClient
+
+**LoadBalancerClient / LBC (Interface)**
 
 - We use this time "LoadBalancerClient" that gets always one instance(ServiceInstace) which has less load factor.
 
@@ -355,7 +377,7 @@ eureka.client.service-url.defaultZone=http://localhost:8761/eureka
 
 - InstanceId is required if you are running your application multiple times (multiple instances). IF there is only one instance then it is not required.
 
-### Open Feign (Feign Client)
+#### Open Feign (Feign Client)
 
 - It is called as abstract client (or) Declarative Client.
 - Here, we need to write interface with abstract methods. Then one class is generated using LoadBalancerClient internally , ie called as Proxy [Dynamic Proxy class].
@@ -385,7 +407,7 @@ eureka.client.service-url.defaultZone=http://localhost:8761/eureka
 - Method name is nerver considered for code generation (any method name is fine!!)
 - Incase of ReturnType/Parameter is a complex type(classType) then same type must be copied from producer Microservice to Consumer Microservice
 
-  ### Spring Cloud - Config Server
+### [Spring Cloud - Config Server](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/MicroServices/Config%20Server)
 
 - In a application there can be multiple Microservices
 - In all these Microservices there can be some common KEY=VALs
@@ -401,7 +423,7 @@ eureka.client.service-url.defaultZone=http://localhost:8761/eureka
     (Ex: D:/myapp/application.properties , inside project)
 - Native Config used only in Dev/Testing Purpose not in Production.
 
-### Distributed Tracing
+### [Distributed Tracing](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/MicroServices/Distributed%20Tracing)
 
 Problem Statement:- Finding Execution Path and Order of Execution of Microservices is complex as they are running at different devices.
 
@@ -442,7 +464,7 @@ Problem Statement:- Finding Execution Path and Order of Execution of Microservic
 
 **parentId:** Current Microservice ParentID is taken from previous Microservice spandId
 
-### Actuator
+### [Actuator and Admin Server](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/MicroServices/Actuator%20and%20Admin%20Server)
 
 - For any type of Spring Boot applications, we may need some additional services like Beans, info, cache, scheduling, metrics, health,..etc
 - Every Service is a pre-defined class called as Endpoint.
@@ -522,7 +544,9 @@ info.client.mode=CLOUD
 info.client.deploy=true
 ```
 
-### Actuator : Admin Server/Client
+### Actuator - Admin Server/Client
+
+**Actuator : Admin Server/Client**
 
 - Actuator has given multiple services to observe operations, but all are manually entered URLs.
 
@@ -550,7 +574,7 @@ application.properties
 spring.boot.admin.client.url=http://localhost:9999
 ```
 
-### Message Queues (MQs)
+### Message Queues
 
 **Message Queues :** Message Queues are used to send data from one System (Producer) to another System (Consumer) as Continioues Data Flow.
 
