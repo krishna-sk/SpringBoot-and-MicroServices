@@ -97,7 +97,7 @@
 
 Code/API/Tools to implement application.
 
-**Difference b/w Cloud Computing and Spring Cloud:**
+**Difference between Cloud Computing and Spring Cloud:**
 
 **Cloud Computing :** PaaS, SaaS, IaaS\
  Using Services for rental to deploy/run/moniter our application in internet. (Concept of POST development)\
@@ -602,7 +602,7 @@ APIs used for Message Queues
 
 **Publish and Subscribe Communication :** If one message is given to multiple Consumers (Cloned Copied) that is called as Pub/Sub.
 
-**Destination :** It is a memory that exist inside MOM S/w which stores messages given by Producer s/w.
+**Destination :** It is a memory that exist inside MOM software which stores messages given by Producer software.
 
 **Destinations are two types :** Queue ,Topic
 
@@ -623,3 +623,83 @@ APIs used for Message Queues
 - ..\apache-activemq-5.16.3\conf\users.properties
 - Click on Queues/Topics here.
 - ctrl+C to stop ActiveMQ
+
+#### JMS - Java Message Service
+
+- API Given by Sun Microsystem/Oracle.
+- By using this API we can develop MQs.
+- Both Producer and Consumer must be Java Application.
+- JMS is a Specification. [Interfaces, Annotations]
+- JMS vendor is Apache Active MQ API.
+- Apache Active = MOM software + JMS Vendor(API) + UI (Web Console)
+- We can see details at Web Console(UI) using HTTP protocol at 8161.
+- Web Console Port Number : 8161 (HTTP)
+- Communication Port Number : 61616 (TCP)
+- Connection must be created between Producer/Consumer and MOM software created using ConnectionFactory.
+- Producer can send data to MOM software using 'JmsTemplate' (Autoconfigured in Boot)
+
+##### Spring Manual Configuration
+
+> This is auto configured in Spring Boot
+
+```java
+@Configuration
+public class AppConfig {
+	@Bean
+	public ConnectionFactory connectionFactory() {
+		ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory();
+		cf.setBrokerURL("tcp://localhost:61616");
+		cf.setUserName("admin");
+		cf.setPassword("admin");
+		return cf;
+	}
+
+	@Bean
+	public JmsTemplate jmsTemplate() {
+		return new JmsTemplate(cf());
+	}
+}
+```
+
+- In Spring Boot , autoconfiguration is given for above code, but we need to add "Spring For Apache Active MQ 5" dependency in application
+
+```xml
+
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-activemq</artifactId>
+</dependency>
+```
+
+- In Properties/YAML file we need to provide
+
+###### application.properties
+
+```properties
+spring.activemq.broker-url=tcp://localhost:61616
+spring.activemq.user=admin
+spring.activemq.password=admin
+
+# Even default is false. Indicates P2P (Peer-To-Peer Communication), 
+# true indicated pub/sub(Publish and Subscribe Communication)
+spring.jms.pub-sub-domain=false
+
+#Destination name
+my.app.desti-name=sample
+```
+
+###### application.yml
+
+````properties
+my:
+  app:
+    desti-name: sample
+spring:
+  activemq:
+    broker-url: tcp://localhost:61616
+    password: admin
+    user: admin
+  jms:
+    pub-sub-domain: false
+    ```
+````
