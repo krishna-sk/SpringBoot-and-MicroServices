@@ -366,9 +366,9 @@ eureka.client.service-url.defaultZone=http://localhost:8761/eureka
 
 - If all/multiple instances are having same LoadFactor,\
   (ex: IID#110 -> LF 0.3, IID#234 -> LF 0.3 , IID#875 -> LF 0.3), Choose any one Instance in Random [ ex: new Random().nextInt(3) ]
-- LoadBalancerClient(I) and Impl class is : BlockingLoadBalancerClient(C) ( old one : RibbonLoadBalancerClient(C) )
+- LoadBalancerClient(I) and Implementation class is : BlockingLoadBalancerClient(C) ( old one : RibbonLoadBalancerClient(C) )
   Ribbon was netflix component (3rd party) now moved to Cloud LoadBalancer spring cloud component.
-- ServiceInstance(I) impl class is : EurekaServiceInstance(C)
+- ServiceInstance(I) Implementation class is : EurekaServiceInstance(C)
 - ${random.value} : It internall executes class: RandomValuePropertySource(C), method: getRandomValue();
 
 - Note: It is generting one hexa-decimal (base-16) value that can be used as id(PK/IDs)\
@@ -416,7 +416,7 @@ eureka.client.service-url.defaultZone=http://localhost:8761/eureka
 - All KEY=VAL finally stored inside memory ie called as "Environment"
 - Config server recomanded port number is : 8888 (we can use any)
 - \*\*\* When we run Microservice first Config Client only executed gets key=val, merge with Environment and start Microservice Application finally register with eureka.\
-  [org.springframework.core.env] Environment(I) Impl class StandardEnvironment(C)
+  [org.springframework.core.env] Environment(I) Implementation class StandardEnvironment(C)
 - Types of Configurations:-
   - External Configuratin : All key-val are kept in Cloud/Internet location example using Github
   - Native Configuration : Storing all key-val inside local system.\
@@ -680,7 +680,7 @@ spring.activemq.broker-url=tcp://localhost:61616
 spring.activemq.user=admin
 spring.activemq.password=admin
 
-# Even default is false. Indicates P2P (Peer-To-Peer Communication), 
+# Even default is false. Indicates P2P (Peer-To-Peer Communication),
 # true indicated pub/sub(Publish and Subscribe Communication)
 spring.jms.pub-sub-domain=false
 
@@ -703,3 +703,34 @@ spring:
     pub-sub-domain: false
     ```
 ````
+
+#### JMS - ActiveMQ API Details
+
+- Sun/Oracle -- 1st Party --- API Specificiation - JMS API
+
+- Vendor\[Apache] -- 3rd Party --- API Implementation -- ActiveMQ API
+
+- Programmer/Company -- 2nd Party -- Applications
+
+###### javax.jms (package)
+
+1. Session (I): Once a connection is created between Producer and MOM
+   (or Consumer and MOM) then one Session is created.
+
+2. Message(I)\
+   TextMessage(I)\
+   To send data from Producer to MOM/MOM to consumer these are used.
+
+###### org.apache.activemq (package)
+
+1. ActiveMQSession(C) : It is Implementation class for Session(I)
+
+2. ActiveMQTextMessage(C) : It is Implementation class for TextMessage(I)
+
+###### org.springframework.jms.core (Spring)
+
+MessageCreator (I)\
+createMessage(Session session) : Message\
+This interface says use session from container and call method to create Message finally return same.
+
+###### To Convert P2P Code into Pub/Sub Concept, just modify spring.jms.pub-sub-domain=true in application.properties file
