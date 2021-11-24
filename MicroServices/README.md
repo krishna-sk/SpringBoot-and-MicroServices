@@ -734,3 +734,91 @@ createMessage(Session session) : Message\
 This interface says use session from container and call method to create Message finally return same.
 
 ###### To Convert P2P Code into Pub/Sub Concept, just modify spring.jms.pub-sub-domain=true in application.properties file
+
+#### Limitations of JMS/ActiveMQ:-
+
+- No Load Balancer. There is single MOM software exist. In case of multiple no.of consumers/producers are added, then MOM works very slow.
+- No Data partitions (for large data trasfer) : Data is sent without any serailization and no data partitions.
+- Language Dependent, works only for Java Producer/Consumers.
+- It is protocol dependent, work only using TCP.
+
+#### Apache Kafka S/w
+
+- It is Open Source Messages Queue API used between multiple applications.
+- It follows Multi-Borker Concept, to handle no.of consumer and message trasfer.
+- Any language Applications can be integrated.
+- It is protocol independent. (HTTP,TCP...)
+- Large data is send in partitions (Data Packets)
+- Data is sent from Producer in Serialized again at consumer it is deserialized.
+- Here, only Topic Memory exist. By using this we can send data to both one or multiple consumers.
+- Topics Section stores data based on KEY(topicName) which is controlled by Apache ZooKeeper.
+- One Message Broker reads data from Topic Section and send it to consumer.
+- There can be multiple topics Created inside Topics section.
+- Producer will send data in KEY=VAL Format (Data is Serialized) at Consumer side Data is DeSerialized.
+- Consumer and Broker are connected using topicName only.There is no direct communication b/w producer and conusmer.
+- Cluster = Group of Message Brokers. When we start Kafka S/w it is started with 1 Message broker only.
+- EcoSystem = Topics + Cluster + Zookeeper
+
+Download Kafka S/w
+
+1. Goto : https://www.apache.org/dyn/closer.cgi?path=/kafka/3.0.0/kafka_2.12-3.0.0.tgz
+
+2. click on : HTTP
+   (2.8.0 )\
+    Released April 19, 2021\
+    Binary downloads:\
+    Scala 2.12 - kafka_2.12-2.8.0.tgz (asc, sha512)
+
+3. Extract : kafka_2.12-3.0.0.tgz
+4. Copy to root folder or C:/drive
+5. Open Cmd in basePath/root folder\
+   C:\kafka_2.12-3.0.0>
+
+For other OS:
+https://kafka.apache.org/quickstart
+
+##### Execute Commands
+
+a. Zookeeper
+
+```properties
+C:\kafka_2.12-2.8.0>
+.\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
+```
+
+It runs on port : 2181
+
+b. Kafka Server
+
+```properties
+C:\kafka_2.12-2.8.0>
+.\bin\windows\kafka-server-start.bat .\config\server.properties
+```
+
+It runs on port : 9092
+
+c. Topic
+
+```properties
+C:\kafka_2.12-2.8.0>
+.\bin\windows\kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic sample
+```
+
+d. Producer console
+
+```properties
+C:\kafka_2.12-2.8.0>
+.\bin\windows\kafka-console-producer.bat --bootstrap-server localhost:9092 --topic sample
+```
+
+e. Consumer console
+
+```properties
+.\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic sample --from-beginning
+```
+
+**Topic :** It is created inside Kafka S/w using details like Name, replication-factor(=no.of Consumer), partitions size (1)
+
+**Replication-factor :** replication-factor means creating no.of copies of actual message to be delivered to consumer. If we did not specify (then no.of consumers connected while running).
+
+**partitions size :** Data is converted into packets internally and stored with index numbers (offset)
