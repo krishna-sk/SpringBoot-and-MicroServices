@@ -240,7 +240,7 @@ ex: AWS, Google Cloud, MS-AZURE
 - But already Spring Boot is a Parent Project. So, this is added to our project using BOM (Bill Of Materials) using a tag "\<dependencyManagement>"
 - If we are developing Spring Cloud Applications then internally it uses Spring boot concepts also.
 
-###### 08-November-2021
+###### 09-November-2021
 
 ### [Register and Discovery Server](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/MicroServices/Eureka%20Register%20%26%20Discovery%20Server)
 
@@ -283,6 +283,8 @@ eureka.client.service-url.defaultZone=http://localhost:8761/eureka
    eureka.client.register-with-eureka=true
 ```
 
+###### 10-November-2021
+
 ### [Microservice - Intra Communication](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/MicroServices/Microservice%20Intra%20Communication)
 
 **Microservice --- Intra Communication**
@@ -308,6 +310,8 @@ eureka.client.service-url.defaultZone=http://localhost:8761/eureka
 
 - We are using Eureka Server (Register and Discovery Server) to store our Microservice Data (Publish),to fetch other Microservice data(Find) using DiscoveryClient(I).
   - (ServiceInstance = ServiceId + InstanceId + HOST + PORT + LF)
+
+###### 09-November-2021
 
 #### CODING STEPS USING DISCOVERY CLIENT
 
@@ -345,6 +349,8 @@ eureka.client.service-url.defaultZone=http://localhost:8761/eureka
 
 - DiscoveryClient returns all ServiceInstances from Eurekaas List<SI>, we should choose any one instance manually.(It is not a better approch)
 
+###### 10,11th-November-2021
+
 ### LoadBalancerClient
 
 **LoadBalancerClient / LBC (Interface)**
@@ -377,6 +383,8 @@ eureka.client.service-url.defaultZone=http://localhost:8761/eureka
 
 - InstanceId is required if you are running your application multiple times (multiple instances). IF there is only one instance then it is not required.
 
+###### 11,12th-November-2021
+
 #### Open Feign (Feign Client)
 
 - It is called as abstract client (or) Declarative Client.
@@ -407,6 +415,8 @@ eureka.client.service-url.defaultZone=http://localhost:8761/eureka
 - Method name is nerver considered for code generation (any method name is fine!!)
 - Incase of ReturnType/Parameter is a complex type(classType) then same type must be copied from producer Microservice to Consumer Microservice
 
+###### 12,13th-November-2021
+
 ### [Spring Cloud - Config Server](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/MicroServices/Config%20Server)
 
 - In a application there can be multiple Microservices
@@ -422,6 +432,8 @@ eureka.client.service-url.defaultZone=http://localhost:8761/eureka
   - Native Configuration : Storing all key-val inside local system.\
     (Ex: D:/myapp/application.properties , inside project)
 - Native Config used only in Dev/Testing Purpose not in Production.
+
+###### 14th-November-2021
 
 ### [Distributed Tracing](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/MicroServices/Distributed%20Tracing)
 
@@ -463,6 +475,8 @@ Problem Statement:- Finding Execution Path and Order of Execution of Microservic
 **spandId :** To find only one Microservice execution details.
 
 **parentId:** Current Microservice ParentID is taken from previous Microservice spandId
+
+###### 15 to 17th-November-2021
 
 ### [Actuator and Admin Server](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/MicroServices/Actuator%20and%20Admin%20Server)
 
@@ -544,6 +558,8 @@ info.client.mode=CLOUD
 info.client.deploy=true
 ```
 
+###### 17th-November-2021
+
 ### Actuator - Admin Server/Client
 
 **Actuator : Admin Server/Client**
@@ -573,6 +589,8 @@ application.properties
 ```textile
 spring.boot.admin.client.url=http://localhost:9999
 ```
+
+###### 18th-November-2021
 
 ### Message Queues
 
@@ -623,6 +641,8 @@ APIs used for Message Queues
 - ..\apache-activemq-5.16.3\conf\users.properties
 - Click on Queues/Topics here.
 - ctrl+C to stop ActiveMQ
+
+###### 19th-November-2021
 
 #### JMS - Java Message Service
 
@@ -704,6 +724,8 @@ spring:
     ```
 ````
 
+###### 22nd-November-2021
+
 #### JMS - ActiveMQ API Details
 
 - Sun/Oracle -- 1st Party --- API Specificiation - JMS API
@@ -734,6 +756,8 @@ createMessage(Session session) : Message\
 This interface says use session from container and call method to create Message finally return same.
 
 ###### To Convert P2P Code into Pub/Sub Concept, just modify spring.jms.pub-sub-domain=true in application.properties file
+
+###### 23rd-November-2021
 
 #### Limitations of JMS/ActiveMQ:-
 
@@ -817,8 +841,60 @@ e. Consumer console
 .\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic sample --from-beginning
 ```
 
+###### 24th-November-2021
+
 **Topic :** It is created inside Kafka S/w using details like Name, replication-factor(=no.of Consumer), partitions size (1)
 
 **Replication-factor :** replication-factor means creating no.of copies of actual message to be delivered to consumer. If we did not specify (then no.of consumers connected while running).
 
 **partitions size :** Data is converted into packets internally and stored with index numbers (offset)
+
+###### 25th-November-2021
+
+### [Integration : Spring Boot + Apache kafka](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/MicroServices/Message%20Queues/Apache%20Kafka)
+
+- Replication-Factor is used to specify no.of copies to be created and delivered to no.of consumers.\
+ *Ex :* Replication-Factor=4, then actual message 4 copies created and given to 4 consumers.
+
+- Replication-Factor is not provided then based on no.of consumers connected to kafka before sending message to such topic is taken as Replication-Factor internally. But, all these consumer should maintain one common word ie groupId.\
+  *Ex :* C1(groupId=ABC), C2(groupId=ABC), C3(groupId=ABC), C4(groupId=MNO) then topic=Sample, connected groupId request for 3 copies of actual message.
+
+
+- KafkaTemplate<K,V> is a auto-configured class given by Spring For Apache kafka
+  used to send data from producer application to kafka s/w using topicname
+  and sends in Serialized Format.
+
+- @KafkaListener() is used at consumer application. To read data based on
+   topicName and groupId.
+
+- ToDo Serialization and Deserialization, Kafka API has given classes.
+
+```properties
+my:
+  app:
+    tpc-name: common-data
+server:
+  port: 8080
+spring:
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: sample
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/boot9am
+    username: test
+    password: root
+  jpa:
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: create
+```
