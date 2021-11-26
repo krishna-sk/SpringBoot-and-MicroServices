@@ -20,6 +20,7 @@
 - [Spring Boot Web Mvc](#spring-boot-web-mvc)
 - [Spring Boot Restful Services](#spring-boot-restful-services)
 - [Microservices](#microservices)
+- [Spring Batch Processing](#spring-batch-processing)
 
 ## [@ComponentScan](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/ComponentScan)
 
@@ -714,3 +715,44 @@ freemarker : https://freemarker.apache.org/
 - LBS will not process request.
 - It will dispatch request to ServiceInstance
 - Every ServiceInstance is identified using InstanceId(HexaDecimal Value)
+
+###### 26th-November-2021
+
+## Spring Batch Processing
+
+**Batch Processing :** Transfer large amount of data from source to destination with some operations in between.\
+_Ex:_ CSV File (10000) --> MySQL, MongoDB ---> XML File
+
+**Job :** Actual task that indicates sending data from source to destination.
+**Step :** One Job can have 1 to n Steps.
+**Reader :** Reads data from Source.
+**Processor :** Will perform Operations on the data read by the reader.
+**Writer :** Writes data to the destination.
+**Job Launcher :** Start Job Execution.
+**Job Repository(H2/MySQL) :** Stores all details of jobs.
+
+#### API Details
+
+- IteamReader\<T> (I)\
+  read():T
+
+- ItemProcessor<I,O> (I)\
+  process(I i):O
+
+- ItemWriter\<T> (I)\
+  write(List\<T>):void
+
+- Step (I)\
+  StepBuilderFactory(C) = stepName + reader + processor + writer + chunk (int)
+
+- JobExecutionListener(I)\
+  beforeJob(je)\
+  afterJob(je)\
+  optional to use , to log/trace details/batch status ..etc before and after job.
+
+- Job(I) = JobBuilderFactory(C) = name + steps + execution order + listener
+
+##### Batch Example : Reading from csv file and write to MySQL
+
+**FlatFileItemReader\<T> :** This is a pre-defined reader class given by batch api, used to read data from a file and convert to Objects(rows as Objects)\
+**JdbcBatchItemWriter\<T> :** This is a pre-defined writer class given by batch api, used to write data to SQL Database.
