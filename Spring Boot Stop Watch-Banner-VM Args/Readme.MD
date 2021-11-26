@@ -27,11 +27,11 @@ String value = System.getProperty("key");
 ```textile
 --key=value
 ```
-1. VM-args
+2. VM-args
 ```textile
 -Dkey=value
 ```
-1. application-profile.properties
-1. application-profile.yml
-1. application.properties
-1. aplication.yml
+3. application-profile.properties
+4. application-profile.yml
+5. application.properties
+6. aplication.yml
