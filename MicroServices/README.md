@@ -854,18 +854,17 @@ e. Consumer console
 ### [Integration : Spring Boot + Apache kafka](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/MicroServices/Message%20Queues/Apache%20Kafka)
 
 - Replication-Factor is used to specify no.of copies to be created and delivered to no.of consumers.\
- *Ex :* Replication-Factor=4, then actual message 4 copies created and given to 4 consumers.
+  _Ex :_ Replication-Factor=4, then actual message 4 copies created and given to 4 consumers.
 
 - Replication-Factor is not provided then based on no.of consumers connected to kafka before sending message to such topic is taken as Replication-Factor internally. But, all these consumer should maintain one common word ie groupId.\
-  *Ex :* C1(groupId=ABC), C2(groupId=ABC), C3(groupId=ABC), C4(groupId=MNO) then topic=Sample, connected groupId request for 3 copies of actual message.
-
+  _Ex :_ C1(groupId=ABC), C2(groupId=ABC), C3(groupId=ABC), C4(groupId=MNO) then topic=Sample, connected groupId request for 3 copies of actual message.
 
 - KafkaTemplate<K,V> is a auto-configured class given by Spring For Apache kafka
   used to send data from producer application to kafka s/w using topicname
   and sends in Serialized Format.
 
 - @KafkaListener() is used at consumer application. To read data based on
-   topicName and groupId.
+  topicName and groupId.
 
 - ToDo Serialization and Deserialization, Kafka API has given classes.
 
@@ -882,7 +881,7 @@ spring:
       group-id: sample
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      
+
     producer:
       bootstrap-servers: localhost:9092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -898,3 +897,30 @@ spring:
     hibernate:
       ddl-auto: create
 ```
+
+###### 26th November 2021
+### Spring Cloud API Gateway
+
+- There are multiple components in Microservice Design and all running at different locations (IPs/Ports).
+
+- There must be one common and entry and exit point for our Microservice setup. ie Gateway (Spring Cloud Gateway)
+
+- Gateway is used for
+
+  1.  Routing : Executing a Microservice when request made by client.
+
+      - Static Routing : (single Microservice instance), Gateway makes a direct call to Microservice
+      - Dynamic Routing: (Multiple Microservice instances), gateway goes to eureka to fetch A ServiceInstance having less load factor.
+
+  1.  Filters : Modify Request/Response Sections, Adding Header, Req Params..etc
+
+  1.  Security :- We can implement Token based Security (JWT/Oauth/3rd party)
+      (ReST is stateless, No HttpSession)
+- For a Reuqest it will pass API Gateway once, if there is Microservice Intracommunication then no need to go through API gateway again.
+- Gatway makes request to Microservice, Eureka never makes any request to Microservice.
+- Even Gateway App must be register with Eureka, like other Microservice apps.
+- API Gateway also one type of Microservice, that can make call to any Microservice in App, using eureka it gets serviceInstance data.
+- Gateway Application contains HandlerService that chooses one ServiceId[Dynamic Routing]/URL[static rounting] of Microservice based on Path Condition(Predicate).
+- There are optional Filters used. Pre-Filter executed before sending request to Microservice and Post-Filter is executed after getting response from Microservice.\
+Pre-Filter --> works on Request\
+Post-Filter--> Works on Response
