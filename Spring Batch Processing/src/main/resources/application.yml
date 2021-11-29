@@ -1,0 +1,14 @@
+#Database Connection Properties
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/boot9am
+    username: test
+    password: root
+
+#Batch Properties
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      initialize-schema: ALWAYS
