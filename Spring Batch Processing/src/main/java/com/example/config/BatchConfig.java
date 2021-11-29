@@ -46,7 +46,8 @@ public class BatchConfig {
 	@Bean
 	public FlatFileItemReader<InputProduct> reader() {
 		FlatFileItemReader<InputProduct> reader = new FlatFileItemReader<>();
-		reader.setResource(new ClassPathResource("products.csv"));
+//		reader.setResource(new ClassPathResource("products.csv"));
+		reader.setResource(new ClassPathResource("MOCK_DATA.csv"));
 //		reader.setResource(new FileSystemResource("D://sample/product.csv"));
 //		reader.setResource(new UrlResource("https://abcd.com/files/products.csv"));
 
@@ -58,6 +59,11 @@ public class BatchConfig {
 					{
 						setDelimiter(DELIMITER_COMMA);
 						setNames("id", "name", "price");
+						/*
+						 * include only first three columns from the file, names and fields count should
+						 * match
+						 */
+						setIncludedFields(new int[] { 0, 1, 2 });
 					}
 				});
 
@@ -66,9 +72,12 @@ public class BatchConfig {
 						setTargetType(InputProduct.class);
 					}
 				});
+
 			}
 
 		});
+//		 to skip the header in the file we skip the first line
+		reader.setLinesToSkip(1);
 		return reader;
 	}
 
@@ -141,10 +150,7 @@ public class BatchConfig {
 	// Job Object
 	@Bean
 	public Job job() {
-		return jobBuilderFactory.get("jobOne")
-				.incrementer(new RunIdIncrementer())
-				.listener(listener())
-				.start(stepOne())
+		return jobBuilderFactory.get("jobOne").incrementer(new RunIdIncrementer()).listener(listener()).start(stepOne())
 //				.next(stepTwo())
 //				.next(stepThree())
 				.build();
