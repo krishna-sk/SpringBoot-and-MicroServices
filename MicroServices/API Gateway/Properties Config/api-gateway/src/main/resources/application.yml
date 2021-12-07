@@ -1,0 +1,22 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+server:
+  port: 8090
+
+spring:
+  application:
+    name: GATEWAY
+  cloud:
+    gateway:
+      routes:
+      - id: employeeModule
+        predicates:
+        - Path=/employee/**
+        uri: lb://EMPLOYEE-SERVICE  
+      - id: productModule
+        predicates:
+        - Path=/product/**
+        uri: lb://PRODUCT-SERVICE      
