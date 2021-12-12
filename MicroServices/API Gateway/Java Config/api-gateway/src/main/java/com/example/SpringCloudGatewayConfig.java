@@ -13,11 +13,15 @@ public class SpringCloudGatewayConfig {
 				.route(
 						"employeeServiceId", //ID
 						r->r.path("/employee/**") //Predicate(Path)
+						.filters(f -> f.addRequestHeader("sample-request-employee-header", "Hello from request header @ Employee Service")
+								.addResponseHeader("sample-response-header", "sample-response-header"))
 						.uri("lb://EMPLOYEE-SERVICE") //URI
 						)
 				.route(
 						"productServiceId", 
 						r->r.path("/product/**")
+						.filters(f -> f.addRequestHeader("sample-request-product-header", "Hello from request header @ Product Service")
+								.addResponseHeader("sample-response-header", "sample-response-header"))
 						.uri("lb://PRODUCT-SERVICE")
 						)
 				.build(); 

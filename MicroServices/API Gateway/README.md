@@ -36,6 +36,8 @@
 - Java Configuration is the mostly used configuration in API Gateway.
 - RouteLocator (List<Routes>) => Builder class => Route Obj (Id,Path,URI, Filters).
 
+##### For dynamic routing
+
 ```java
 @Configuration
 public class SpringCloudGatewayConfig {
@@ -83,7 +85,6 @@ class Route {
 - Here /\*\* indicates any additional path with base.
 
 ```java
-package in.nareshit.raghu.config;
 @Configuration
 public class SpringCloudGatewayConfig {
 	@Bean
@@ -100,6 +101,42 @@ public class SpringCloudGatewayConfig {
 						.uri("http://localhost:8080") //URI
 						)
 				.build();
+	}
+}
+```
+
+**Filters:-** To add Request/Response Headers, Request Params to input request or output response we use this.\
+ex: Authroization=JWTToken, serviceId=sample ..etc\
+route = id + path + filters + uri
+
+- Request data read in Microservice and Response Data check at consumer/client application.
+- Sample code at Microservice is:
+
+```java
+@RequestHeader("InputTest") String input
+```
+##### dynamic routing including filters
+```java
+@Configuration
+public class SpringCloudGatewayConfig {
+	@Bean
+	public RouteLocator configRoutes(RouteLocatorBuilder builder) {
+		return builder.routes()
+				.route(
+						"employeeServiceId", //ID
+						r->r.path("/employee/**") //Predicate(Path)
+						.filters(f -> f.addRequestHeader("sample-request-employee-header", "Hello from request header @ Employee Service")
+								.addResponseHeader("sample-response-header", "sample-response-header"))
+						.uri("lb://EMPLOYEE-SERVICE") //URI
+						)
+				.route(
+						"productServiceId", 
+						r->r.path("/product/**")
+						.filters(f -> f.addRequestHeader("sample-request-product-header", "Hello from request header @ Product Service")
+								.addResponseHeader("sample-response-header", "sample-response-header"))
+						.uri("lb://PRODUCT-SERVICE")
+						)
+				.build(); 
 	}
 }
 ```
