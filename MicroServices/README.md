@@ -13,6 +13,7 @@
 - [Actuator and Admin Server](#actuator-and-admin-server)
 - [Actuator - Admin Server/Client](#actuator---admin-serverclient)
 - [Message Queues](#message-queues)
+- [Spring Cloud API Gateway](#spring-cloud-api-gateway)
 
 ###### 03-November-2021
 
@@ -900,7 +901,7 @@ spring:
 
 ###### 26th November 2021
 
-### Spring Cloud API Gateway
+### [Spring Cloud API Gateway](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/MicroServices/API%20Gateway)
 
 - There are multiple components in Microservice Design and all running at different locations (IPs/Ports).
 
