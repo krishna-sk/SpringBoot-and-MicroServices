@@ -3,6 +3,7 @@
 #### Table of Contents
 
 - [InMemory Authentication](#inmemory-authentication)
+- [JDBC Authentication](#jdbc-authentication)
 
 ###### 11-December-2021
 
@@ -42,8 +43,8 @@ Cashier --> Deposite, Withdraw ..etc\
 **InMemoryAuthentication :** Storing data inside RAM(Random Access Memory).it is used for Testing Purpose only, not used in production.
 
 - We must define one implementation class for "WebSecurityConfigurerAdapter" (Abstract Class) and override 2 methods:
-  - configure(AuthenticationManagerBuilder) //authenitcation\
-  - configure(HttpSecurity) //authorization
+  - configure(AuthenticationManagerBuilder) //Authenitcation\
+  - configure(HttpSecurity) //Authorization
 
 user data (inside RAM)
 
@@ -155,4 +156,107 @@ public class UserController {
     </form>
   </body>
 </html>
+```
+
+#### JDBC Authentication
+
+- We should write all Security related code only in one class.\
+  ie SecurityConfig (that extends WebSecurityConfigurerAdapter)
+
+- Override 2 methods : configure(AuthenticationManagerBuilder) [Authentication]\
+   configure(HttpSecurity) [Authorization]
+
+- We can use PasswordEncoder:-
+- Storing Plain text password inside Database is not a good Approch.
+- Better Encode this (Convert into UnReadable format). ex: SAM -> Hrgs%2BS$
+- There is no Decode concept, you input at Login time is encoded and compared with DB value.
+
+- For all these security concept only one Dependency we need to add\
+  ie : Spring Security
+
+##### SQL Commands to Create Database
+
+```sql
+
+mysql> drop database boot9am;
+Query OK, 1 row affected (0.12 sec)
+
+mysql> create database boot9am;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> use boot9am;
+Database changed
+
+mysql> show tables;
+Empty set (0.00 sec)
+
+```
+
+##### SQL Commands to Create Table
+
+```sql
+create table users_tab(
+   uid int,uname varchar(25),
+   upwd varchar(70), uenable int,
+   urole varchar(20));
+
+Query OK, 0 rows affected (0.05 sec)
+```
+
+##### Create a java class to encode the password
+
+```java
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+public class Test {
+
+	public static void main(String[] args) {
+		String pwd = "AJAY";
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		String encPwd = encoder.encode(pwd);
+		System.out.println(encPwd);
+	}
+}
+
+```
+##### SQL Commands to Insert Users into Table
+
+```sql
+ insert into users_tab values(1,'sam','$2a$10$AMMx5M.0VUUL1PfePYI8eu2eJKyscfj2dOY/HhVZknRksRJFDw9ZW',1,'ADMIN');
+ insert into users_tab values(2,'syed','$2a$10$5ELjJk0LNqrfs3QdfUEDEe/5HLdtbXbAAXgv4g9UAuSaAfgO0UM1.',1,'EMPLOYEE');
+ insert into users_tab values(3,'ajay','$2a$10$ZEnM2pedJxZKmjTtXmRdX.NSxH82t65GqEfQBEjZOAPM2tAS.tfUq',1,'STUDENT');
+```
+```sql
+mysql> show tables;
++-------------------+
+| Tables_in_boot9am |
++-------------------+
+| users_tab         |
++-------------------+
+1 row in set (0.01 sec)
+
+mysql> select * from users_tab;
++------+-------+--------------------------------------------------------------+---------+----------+
+| uid  | uname | upwd                                                         | uenable | urole    |
++------+-------+--------------------------------------------------------------+---------+----------+
+|    1 | sam   | $2a$10$AMMx5M.0VUUL1PfePYI8eu2eJKyscfj2dOY/HhVZknRksRJFDw9ZW |       1 | ADMIN    |
+|    2 | syed  | $2a$10$5ELjJk0LNqrfs3QdfUEDEe/5HLdtbXbAAXgv4g9UAuSaAfgO0UM1. |       1 | EMPLOYEE |
+|    3 | ajay  | $2a$10$ZEnM2pedJxZKmjTtXmRdX.NSxH82t65GqEfQBEjZOAPM2tAS.tfUq |       1 | STUDENT  |
++------+-------+--------------------------------------------------------------+---------+----------+
+3 rows in set (0.00 sec)
+```
+
+##### configure(AuthenticationManagerBuilder auth) method
+
+```java
+	
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.jdbcAuthentication()
+		.dataSource(dataSource)
+		.usersByUsernameQuery("SELECT uname,upwd,uenable FROM users_tab WHERE uname=?")
+		.authoritiesByUsernameQuery("SELECT uname,urole FROM users_tab WHERE uname=?")
+		.passwordEncoder(passwordEncoder);
+	}
+	
 ```

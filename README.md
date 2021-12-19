@@ -21,6 +21,7 @@
 - [Spring Boot Restful Services](#spring-boot-restful-services)
 - [Microservices](#microservices)
 - [Spring Batch Processing](#spring-batch-processing)
+- [Spring Security](#spring-security)
 
 ## [@ComponentScan](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/ComponentScan)
 
@@ -756,3 +757,36 @@ _Ex:_ CSV File (10000) --> MySQL, MongoDB ---> XML File
 
 **FlatFileItemReader\<T> :** This is a pre-defined reader class given by batch api, used to read data from a file and convert to Objects(rows as Objects)\
 **JdbcBatchItemWriter\<T> :** This is a pre-defined writer class given by batch api, used to write data to SQL Database.
+
+## [Spring Security](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/Spring%20Security)
+
+###### 11-December-2021
+
+**JAAS :** Java Authentication and Authorization Service
+
+**Authentication :** Authentication is validating username and password. Authentication is 3 types.
+
+1. **InMemory Authentication :** Using RAM (temp) to store user data [Testing purpose only]
+2. **JDBC Authentication :** Using Database + JDBC(SQL) to store and validate user data
+3. **UserDetails Service / ORM Authentication :** Using Database + Data JPA to store and validate user data
+
+**Authorization :** Validate User Role. Authorization is 3 types.
+
+1. **permitAll :** URL can be accessed by everyone [ No login is required ]\
+   ex: /home, /register, /contactUs, /welcome
+
+2. **authenticated :** URL can be accessed only after login [only login + any role is valid]\
+   ex: /profile, /inbox, /settings, /logout
+
+3. **hasAuthority :** Must Login + Matching Role to access URL\
+   ex: /approveLoan [ Login + Role(MANAGER) ]
+
+Ex: Bank Application:-\
+Customer --> Open A/c, checkBal , Req Loan\
+Manager --> View Loan Req, Approve Loan\
+Cashier --> Deposite, Withdraw ..etc\
+
+**Role :** Decides what are operations allowed to a user.
+
+- Filters are components used to execute any logic over request(Pre-Process)/response(Post-Process) connected with a servlet.
+- Spring Security has given pre-defined filter named as: DelegatingFilterProxy.
