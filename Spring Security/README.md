@@ -37,7 +37,7 @@ Cashier --> Deposite, Withdraw ..etc\
 - Filters are components used to execute any logic over request(Pre-Process)/response(Post-Process) connected with a servlet.
 - Spring Security has given pre-defined filter named as: DelegatingFilterProxy.
 
-#### [InMemory Authentication]()
+#### [InMemory Authentication](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/Spring%20Security/inMemoryAuthentication)
 
 ###### 13-December-2021
 
@@ -160,7 +160,7 @@ public class UserController {
 ```
 
 ###### 16-December-2021
-#### [JDBC Authentication]()
+#### [JDBC Authentication](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/Spring%20Security/JDBC%20Authentication)
 
 - We should write all Security related code only in one class.\
   ie SecurityConfig (that extends WebSecurityConfigurerAdapter)
@@ -264,7 +264,7 @@ mysql> select * from users_tab;
 ```
 
 ###### 17-December-2021
-#### Spring Security using ORM
+#### [Spring Security using ORM](https://github.com/krishna-sk/SpringBoot-and-MicroServices/tree/master/Spring%20Security/Spring%20Securiy%20Using%20ORM)
 
 Spring Security using ORM involves in four steps.
 1. User Registration Process
