@@ -1,0 +1,14 @@
+<html xmlns:th="https://www.thymeleaf.org/"
+		xmlns:sec="https://www.thymeleaf.org/extras/spring-security5">
+	<head>
+		<title>SECURITY APP</title>
+	</head>
+	<body>
+		WELCOME TO HOME PAGE!
+		<br/>
+		Logged user: <span sec:authentication="name"></span>,
+		Roles: <span sec:authentication="principal.authorities"></span>
+		<br/>
+		<a th:href="@{/logout}"> LOGOUT </a>
+	</body>
+</html>

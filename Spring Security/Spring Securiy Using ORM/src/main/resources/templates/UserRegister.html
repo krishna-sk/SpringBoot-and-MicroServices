@@ -1,0 +1,20 @@
+<html xmlns:th="https://www.thymeleaf.org/">
+	<head>
+		<title>USER REGISTER </title>
+	</head>
+	<body>
+		<h3>USER REGISTER PAGE</h3>
+		<form th:action="@{/user/save}" method="POST">
+			<pre>
+				NAME  : <input type="text" name="displayName" />
+				EMAIL : <input type="text" name="email" />
+				PWD   : <input type="password" name="password" />
+				ROLES :
+						<input type="checkbox" name="roles" value="ADMIN"/> ADMIN
+						<input type="checkbox" name="roles" value="EMPLOYEE"/> EMPLOYEE
+				<input type="submit" value="Create User"/>
+			</pre>
+		</form>
+		[[${message}]]
+	</body>
+</html>

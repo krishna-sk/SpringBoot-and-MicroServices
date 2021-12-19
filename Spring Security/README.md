@@ -4,6 +4,7 @@
 
 - [InMemory Authentication](#inmemory-authentication)
 - [JDBC Authentication](#jdbc-authentication)
+- [Spring Security using ORM](#spring-security-using-orm)
 
 ###### 11-December-2021
 
@@ -36,7 +37,7 @@ Cashier --> Deposite, Withdraw ..etc\
 - Filters are components used to execute any logic over request(Pre-Process)/response(Post-Process) connected with a servlet.
 - Spring Security has given pre-defined filter named as: DelegatingFilterProxy.
 
-#### InMemory Authentication
+#### [InMemory Authentication]()
 
 ###### 13-December-2021
 
@@ -158,7 +159,8 @@ public class UserController {
 </html>
 ```
 
-#### JDBC Authentication
+###### 16-December-2021
+#### [JDBC Authentication]()
 
 - We should write all Security related code only in one class.\
   ie SecurityConfig (that extends WebSecurityConfigurerAdapter)
@@ -259,4 +261,174 @@ mysql> select * from users_tab;
 		.passwordEncoder(passwordEncoder);
 	}
 	
+```
+
+###### 17-December-2021
+#### Spring Security using ORM
+
+Spring Security using ORM involves in four steps.
+1. User Registration Process
+1. User Login and PasswordEncoder
+1. Customer Login Page
+1. HttpSession and CSRF Token
+
+##### User Registration Process
+
+- Create an User Entity Class
+- Create an Repository to the User Entity Class
+- Create an Service Class to the User Entity to save the user.
+- Create controller class to recieve User Object.
+- Create a User Registration Page.
+
+##### ser Login and PasswordEncoder
+
+- make our User Service Class to implements UserDetailsService Inteface and implement loadByUsername(String username) 
+ method.
+
+UserDetailsService(I) :  This interface is given by Spring Security.This is called by SecurityConfig, when we click on login button. It is used to load User data from DB and convert into Spring Security User Object.
+
+- User(C) one is given by Programmer (entity class), One is given by Spring Security.
+- Roles in String format must be Converted into Spring Security Format.\
+   ie GrantedAuthority(I) and Impl : SimpleGrantedAuthority(C).
+- SecurityConfig validates User data\
+  if invalid, goto Login Page and display Error message\
+  else create HttpSession, Stores user data, goto Default Success URL(Home Page)
+- On Logout, come back to login page. (Destory HttpSession).
+
+#### Security Internals
+
+- Spring Security is designed over Servlets API.
+- A Login page is generated and given default to Users
+
+```html
+<form method="post" action="/login">
+                 Please sign in
+Username: <input type="text" id="username" name="username">
+Password:  <input type="password" id="password" name="password" >
+<button type="submit">Sign in</button>
+</form>
+```
+- On Click Login Submit button, UsernamePasswordAuthenticationFilter is called. and method #attemptAuthentication() is called.
+- It reading un,pwd and validating using Any one Authentication Manager given by programmer
+- Principal(I) Sun Microsersystem : To hold current user data\
+   spring Security has given subtype : Authentication(I) [username + roles]\
+   Impl class is : UsernamePasswordAuthenticationToken(C)
+- once it is created, SessionFixationProtectionStrategy#onAuthentication() method
+- Finally redirect to defaultSuccessurl
+UsernamePasswordAuthenticationFilter#attemptAuthentication()  ====> SessionFixationProtectionStrategy#onAuthentication()
+- On Click Logout link\
+   SecurityContextLogoutHandler#logout() method is called.
+- This method is reading existed HttpSession and calling invalidate()/destory.
+
+#### Adv Java Points
+1. Creating new Session (When user login successful)
+```java
+HttpSession ses = request.getSession();
+	Or
+HttpSession ses = request.getSession(true);
+```
+2. Reading Existed Session
+```java
+HttpSession ses = request.getSession(false);
+```
+3. Add/Put data in session
+```java
+ ses.setAttribute(String key, Object value);
+```
+4. Read data from session
+```java
+Object value = ses.getAttribute(key);
+```java
+5. Destory Session (on logout)
+```java
+   ses.invalidate();
+```
+6. Modify Max Inactive time for one session
+```java
+   ses.setMaxInactiveInterval(int sec);
+
+   ses.setMaxInactiveInterva(-1); //never expire
+
+   ses.setMaxInactiveInterva(600); //10 mins exp.
+```
+-  Spring Security supports to modify Logout URL: using AntPathRequestMatcher
+- You logged in using ADMIN role and trying to access EMPLOYEE data which is not for you. Then Front Controller throw 403-Forbidden.
+   Just to customize (Show our own error page) use accessDeniedPage("/denied"). here "/denied" is our custom end point and it can be anything. need not to be denied only.
+
+- SecurityContextHolder(C) #getContext() : SecurityContext
+
+
+- SecurityContext(I) #getAuthentication(): Authentication
+
+```java
+// simple code
+SecurityContext context = SecurityContextHolder.getContext();
+Authentication auth = context.getAuthentication();
+
+// short format
+Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+// current username and roles
+System.out.println(auth.getName()); //username
+System.out.println(auth.getAuthorities()); //roles
+
+// for only username use Principal p as method param in Controller
+System.out.println(p.getName()); //only username
+```
+- This process is even recomanded by Spring Security to read current user data.Works in both MVC and REST Security.
+
+##### Example Code
+```java
+@Controller
+public class HomeController {
+	...
+	
+	@GetMapping("/home")
+	public String showHome() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		System.out.println(auth.getName()); //username
+		System.out.println(auth.getAuthorities()); //roles
+		return "HomePage";
+	}
+	
+	@GetMapping("/emp")
+	public String showEmp(Principal p) {
+		System.out.println(p.getName()); //only username
+		return "EmpPage";
+	}
+	...
+}
+```
+#### Thymleaf 
+We can directly access Authentication object at Thymeleaf UI using
+```java
+<dependency>
+	<groupId>org.thymeleaf.extras</groupId>
+	<artifactId>thymeleaf-extras-springsecurity5</artifactId>
+</dependency>
+```
+At HTML tag level:
+```html
+<html ... xmlns:sec="https://www.thymeleaf.org/extras/spring-security5" >
+
+Logged user: <span sec:authentication="name"></span>
+Roles: <span sec:authentication="principal.authorities"></span>
+```
+##### Sample : HomePage.html
+```html
+<html xmlns:th="https://www.thymeleaf.org/"
+		xmlns:sec="https://www.thymeleaf.org/extras/spring-security5"
+>
+	<head>
+		<title>SECURITY APP</title>
+	</head>
+	<body>
+		WELCOME TO HOME PAGE!
+		<br/>
+		Logged user: <span sec:authentication="name"></span>,
+		Roles: <span sec:authentication="principal.authorities"></span>
+		<br/>
+		<a th:href="@{/logout}"> LOGOUT </a>
+	</body>
+</html>
 ```
