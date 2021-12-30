@@ -2,13 +2,20 @@ package com.example.controller;
 
 import java.security.Principal;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.example.entity.User;
+import com.example.service.IUserService;
+
 @Controller
 public class HomeController {
+
+	@Autowired
+	private IUserService userService;
 
 	@GetMapping("/welcome")
 	public String showWelcome() {
@@ -16,13 +23,17 @@ public class HomeController {
 	}
 
 	@GetMapping("/home")
-	public String showHome() {
+	public String showHome(HttpSession session, Principal principal) {
 
 		// SecurityContext context = SecurityContextHolder.getContext();
 		// Authentication auth = context.getAuthentication();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		System.out.println(auth.getName()); // username
-		System.out.println(auth.getAuthorities()); // roles
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		System.out.println(auth.getName()); // username
+//		System.out.println(auth.getAuthorities()); // roles
+
+		User user = userService.findUserByEmail(principal.getName()).get();
+		// KEY(String),VALUE(Object)
+		session.setAttribute("username", user.getDisplayName());
 		return "HomePage";
 	}
 

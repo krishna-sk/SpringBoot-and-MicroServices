@@ -4,7 +4,7 @@
 		<title>SECURITY APP</title>
 	</head>
 	<body>
-		WELCOME TO HOME PAGE!
+		WELCOME TO HOME PAGE! : [[${session.username}]]
 		<br/>
 		Logged user: <span sec:authentication="name"></span>,
 		Roles: <span sec:authentication="principal.authorities"></span>

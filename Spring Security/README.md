@@ -449,7 +449,8 @@ At HTML tag level:
 ```html
 <html
   xmlns:th="https://www.thymeleaf.org/"
-  xmlns:sec="https://www.thymeleaf.org/extras/spring-security5">
+  xmlns:sec="https://www.thymeleaf.org/extras/spring-security5"
+>
   <head>
     <title>SECURITY APP</title>
   </head>
@@ -465,3 +466,55 @@ At HTML tag level:
 ```
 
 ###### 20-December-2021
+
+#### Using HttpSession in Spring Security
+
+- HttpSession is created and destoryed by Spring Security
+- We can store our user data,read and modify where you want.
+- We can print data at UI using implicite object session.\
+  ${session.key} : is equals to session.getAttribute("key");
+
+- Session Stores data in KEY=VAL Format
+- KEY is String Type, VALUE is Object Type. It means we can store any type of data, ex: Full User Object, Image Links, Collection data..etc
+- Only User specific data and used at multiple pages, such data store in Session object. Dont store all types of data. ex: userName, EmailId...etc
+
+#### Cross-Site Request Forgery (CSRF)
+
+- A link/Web page created by a different person(attacker) and send to your browser using different channles ex: Ads, Spam Emails, links..etc
+
+- A Request prepared by some one is executed by you and server processes it. That is called as CSRF Attack.
+
+```text
+Q) How this is Handled by Spring Security?
+A) CSRF Token is created when user loads a Web page.
+   This token is stored for HttpSession of such user.
+   Once User submit the request along with Request even Token also submitted.
+   Server validates such token and process request..
+
+   If attacker creates a Webpage that may not have any Token.
+   If provided that may not match for such user. Bcoz token is specific to request/user.
+```
+
+[ctrl+shift+T and ctrl+O]
+
+CsrfRequestDataValueProcessor(C) : This class validates token when request comes
+
+CsrfToken(I) - DefaultCsrfToken(C) : This class is used to indicate token data
+
+CsrfTokenRepository(I) - HttpSessionCsrfTokenRepository(C) : This class uses HttpSession, creates new token, stores token at session, returns token when it need to comapre with current request.
+
+Example Token:\
+f18b9fe2-33f8-4ab3-9777-80a2aa3a7f77\
+722ffe99-1663-4b1a-aa26-2ab1e1615428
+
+- This is internally : UUID.randomUUID().toString()
+- This token exist in browser area/Web page as a hidden input, which can not be read by other systems/users.
+
+  Sample code:
+```html
+<input
+  name="_csrf"
+  type="hidden"
+  value="390b17f6-bec9-4297-b6fa-22a32c1428ad"
+/>
+```
