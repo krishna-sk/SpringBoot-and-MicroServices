@@ -5,6 +5,7 @@
 - [InMemory Authentication](#inmemory-authentication)
 - [JDBC Authentication](#jdbc-authentication)
 - [Spring Security using ORM](#spring-security-using-orm)
+- [Spring Rest Security using JWT](#spring-rest-security-using-jwt)
 
 ###### 11-December-2021
 
@@ -511,6 +512,7 @@ f18b9fe2-33f8-4ab3-9777-80a2aa3a7f77\
 - This token exist in browser area/Web page as a hidden input, which can not be read by other systems/users.
 
   Sample code:
+
 ```html
 <input
   name="_csrf"
@@ -518,3 +520,86 @@ f18b9fe2-33f8-4ab3-9777-80a2aa3a7f77\
   value="390b17f6-bec9-4297-b6fa-22a32c1428ad"
 />
 ```
+
+#### Spring Rest Security using JWT
+
+**Token :**- It is a generated number using User details, Provider and one secret key. Once login it is generated and on logout it is removed.
+
+- JJWT : Java JWT API, used for any Java Technologies.
+- Generated token = id, subject, issure, date, sign(alg) + secret key.
+- Claims : Reading token data by providing details (token + secret)
+
+```xml
+   <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+    <dependencies>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+
+    </dependencies>
+```
+
+#### jwt code
+
+```java
+
+public class JwtUtil {
+
+	public static void main(String[] args) {
+		//1. generate token
+		String secret = "SECRET";
+
+		//xxx.yyy.zzzz
+		String token =
+				Jwts.builder()
+				.setId("123456") //userid
+				.setSubject("ajay") //username
+				.setIssuer("MYAPP") //JWT provider
+				.setIssuedAt(new Date())
+				.setExpiration(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(1)))
+				.signWith(SignatureAlgorithm.HS256, secret.getBytes())
+				.compact();
+
+		//String token ="eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIxMjM0NTYiLCJzdWIiOiJhamF5IiwiaXNzIjoiTklULUhZRCIsImlhdCI6MTY0MDMxNzUwMCwiZXhwIjoxNjQwMzE3NTYwfQ.d88xnSpWaLeUvnl-IAbV8q8a2NpNqk6O9KpLMfw8Z0g";
+		System.out.println(token);
+
+		Claims claims =
+				Jwts.parser()
+				.setSigningKey(secret.getBytes())
+				.parseClaimsJws(token)
+				.getBody();
+
+		System.out.println(claims.getId());
+		System.out.println(claims.getSubject());
+		System.out.println(claims.getIssuer());
+
+	}
+}
+```
+
+- Client applications has to store token data. Ex Browser session area/local storage. Browser submits token along with request.Server validates token, if valid then it will process request.
+
+- OncePerRequestFilter : (only after login) A filter which gets executed once per one request.
+
+  - Read Authorization Header
+  - validate Token
+  - if valid create Authentication object\
+   Principal(I) - Authentication(I) - UsernamePasswordAuthenticationToken(C)
+  - No session is used, so set to current request and pass to FC.
+
+- AuthenticationManager : during login filter is not used. In this case UserDetailsService must be called manually and generate token
+  if user is valid.
+
+- AuthenticationEntryPoint: Incase of any Exception while login/access any Resource then SC_UNAUTHORIZED (401), "Unauthorized User!"
